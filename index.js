@@ -4,34 +4,20 @@ var path = require('path');
 var http = require('http').Server(app);
 const PORT = process.env.PORT || 5000
 
+//Routers
+var webRouter = require('./routers/webRouter');
+var appRouter = require('./routers/appRouter');
+
 //Static Files
 app.use('/static', express.static(path.join(__dirname, 'public')))
 
-//Serve Home Page
-app.get('/', function(req, res){
-  res.sendFile(__dirname + "/public/index.html");
-});
+//Use Router
+app.use('/', webRouter)
+app.use('/app', appRouter)
 
-//Serve Features Page
-app.get('/features', function(req, res){
-  res.sendFile(__dirname + "/public/features.html");
-});
-
-//Serve Header Page
-app.get('/header', function(req, res){
-  res.sendFile(__dirname + "/public/header.html");
-});
-
-//Serve Login Page
-app.get('/app/login', function(req, res){
-  res.sendFile(__dirname + "/public/app/login.html");
-});
-
-//Serve Main App Page
-
-//FIXME - CANT GO TO THIS PAGE IF YOU AREN'T LOGGED IN
-app.get('/app', function(req, res){
-  res.sendFile(__dirname + "/public/app/app.html");
+//The 404 Route
+app.get('*', function(req, res){
+  res.sendFile(__dirname + '/public/404.html');
 });
 
 http.listen(PORT, function(){
