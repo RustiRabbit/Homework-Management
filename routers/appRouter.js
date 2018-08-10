@@ -18,6 +18,11 @@ router.get('/login', function(req, res){
  });
 
 //Serve Login Page
+router.get('/logout', function(req, res){
+    res.sendFile(path.resolve(__dirname + "/../public/app/logout.html"));
+ });
+
+//Serve Login Page
 router.get('/header', function(req, res){
     res.sendFile(path.resolve(__dirname + "/../public/app/app-header.html"));
 });
