@@ -16,6 +16,7 @@ app.use('/', webRouter)
 app.use('/app', appRouter)
 
 //The 404 Route
+
 app.get('*', function(req, res){
   res.sendFile(__dirname + '/public/404.html');
 });
