@@ -17,6 +17,8 @@ The features that are in the project are
 - Open `.env.example` and fill it out (you need a postgresql database for `DATAURI` & pick a random number for `SALTROUNDS`)
 - Run `npm start` and go to http://localhost:3000
 
+**Please always use the Development branch**
+
 **For the Databse you will need to make a database from what you see (use your programmer intuition). I'll create a script for this one day**
 
 You could also make a PR?
