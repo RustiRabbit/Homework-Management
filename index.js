@@ -3,6 +3,7 @@ var express = require('express');
 var path = require('path');
 var http = require('http').Server(app);
 require('dotenv').load()
+var ensure_login = require('connect-ensure-login')
 const PORT = process.env.PORT || 5000
 
 //Hashing
@@ -26,12 +27,17 @@ passport.use(new Strategy((username, password, cb) => {
     if (err) {
       console.log(err)
     } else {
+      console.log("Database username = " + res.rows[0].username)
+      console.log("Databse id = " + res.rows[0].id);
       if (username == res.rows[0].username) {
         bcrypt.compare(password, res.rows[0].password, function(err, res) {
-          console.log("Res = " + res)
           if (res == true) {
             cb(null, { id: res.id, username: res.username})
             console.log("logged in!")
+            console.log("INFOMATION:")
+            console.log("res.username = " + res.username);
+            console.log("res.id = " + res.id);
+
           }
         });
       } else {
@@ -44,6 +50,7 @@ passport.use(new Strategy((username, password, cb) => {
 }))
 
 passport.serializeUser(function(user, done) {
+  console.log(user);
   done(null, user);
 });
 
@@ -60,8 +67,8 @@ app.use(require('express-session')({ secret: 'keyboard cat', resave: false, save
 
 // Initialize Passport and restore authentication state, if any, from the
 // session.
-app.use(passport.initialize());
-app.use(passport.session());
+/*app.use(passport.initialize());
+app.use(passport.session());*/
 
 app.use(function(req, res, next){
   res.locals.user = req.user || null
@@ -79,6 +86,8 @@ app.use('/static', express.static(path.join(__dirname, 'public')))
 //Use Router
 app.use('/', webRouter)
 app.use('/app', appRouter)
+
+
 
 //The 404 Route
 app.get('*', function(req, res){

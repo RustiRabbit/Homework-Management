@@ -2,15 +2,18 @@ var express = require('express')
 var router = express.Router()
 var path = require('path');
 var passport = require('passport');
-var ensure_login = require('connect-ensure-login')
+
+//Middleware
+router.use(passport.initialize());
+router.use(passport.session());
 
 //Serve Home Page
-router.get('/', ensure_login.ensureLoggedIn('/app/login'), function(req, res){
-    res.render('app/app', { username: req.session.passport.user});
+router.get('/', isLoggedIn, function(req, res){
+    res.render('app/app', { username: res.user});
 });
-
+  
 //Serve Duework Page
-router.get('/duework', ensure_login.ensureLoggedIn('/app/login'), function(req, res){
+router.get('/duework', isLoggedIn, function(req, res){
     res.render('app/duework');
 });
 
@@ -21,10 +24,23 @@ router.get('/login', function(req, res){
  });
 
 //Login
-router.post('/login', passport.authenticate('local'), function(req, res) {
-    res.redirect('/app');
+router.post('/login', function (req, res, next) {
+    passport.authenticate('local', function (err, user, info) {
+        if (err) {
+            res.status(200).send("ERROR 200. " + res);
+        } else if (info) {
+            res.status(401).send("401 Unauthorized")
+        } else {
+            req.login(user, function(err) {
+                if (err) {
+                    res.status(500).send("REQ.LOGIN ERROR");
+                } else {
+                    res.status(200).send(JSON.stringify(user));
+                }
+            })
+        }
+    })(req, res, next);
 });
-
 
 //Serve Login Page
 router.get('/logout', function(req, res){
@@ -32,5 +48,13 @@ router.get('/logout', function(req, res){
     res.redirect('/');
  });
 
+//Test if the app logged in
+function isLoggedIn(req, res, next) {
+    if(req.isAuthenticated()) {
+      return next();
+    }
+    return res.redirect('/app/login');
+  }
+  
 
 module.exports = router
