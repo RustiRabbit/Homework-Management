@@ -23,7 +23,7 @@ passport.use(new Strategy((username, password, cb) => {
     ssl: true,
   });
   client.connect();
-  client.query("SELECT id, username, password FROM users WHERE username='" + username + "'", (err, res) => {
+  client.query("SELECT id, username, password, firstname, lastname, email FROM users WHERE username='" + username + "'", (err, res) => {
     if (err) {
       console.log(err)
     } else {
@@ -32,7 +32,7 @@ passport.use(new Strategy((username, password, cb) => {
       if (username == res.rows[0].username) {
         bcrypt.compare(password, res.rows[0].password, function(err, answer) {
           if (answer == true) {
-            cb(null, { id: res.rows[0].id, username: res.rows[0].username})
+            cb(null, { id: res.rows[0].id, username: res.rows[0].username, firstname: res.rows[0].firstname, lastname: res.rows[0].lastname, email: res.rows[0].email})
             console.log("logged in!")
 
           }
