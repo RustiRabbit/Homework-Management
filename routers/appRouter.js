@@ -9,7 +9,7 @@ router.use(passport.session());
 
 //Serve Home Page
 router.get('/', isLoggedIn, function(req, res){
-    res.render('app/app', { username: res.user});
+    res.render('app/app', { user: req.user});
 });
   
 //Serve Duework Page
@@ -35,7 +35,7 @@ router.post('/login', function (req, res, next) {
                 if (err) {
                     res.status(500).send("REQ.LOGIN ERROR");
                 } else {
-                    res.status(200).send(JSON.stringify(user));
+                    res.redirect('/app')
                 }
             })
         }

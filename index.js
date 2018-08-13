@@ -30,13 +30,10 @@ passport.use(new Strategy((username, password, cb) => {
       console.log("Database username = " + res.rows[0].username)
       console.log("Databse id = " + res.rows[0].id);
       if (username == res.rows[0].username) {
-        bcrypt.compare(password, res.rows[0].password, function(err, res) {
-          if (res == true) {
-            cb(null, { id: res.id, username: res.username})
+        bcrypt.compare(password, res.rows[0].password, function(err, answer) {
+          if (answer == true) {
+            cb(null, { id: res.rows[0].id, username: res.rows[0].username})
             console.log("logged in!")
-            console.log("INFOMATION:")
-            console.log("res.username = " + res.username);
-            console.log("res.id = " + res.id);
 
           }
         });
@@ -51,11 +48,11 @@ passport.use(new Strategy((username, password, cb) => {
 
 passport.serializeUser(function(user, done) {
   console.log(user);
-  done(null, user);
+  done(null, JSON.stringify(user));
 });
 
-passport.deserializeUser(function(user, done) {
-  done(null, user);
+passport.deserializeUser(function(packet, done) {
+  done(null, JSON.parse(packet));
 });
 
 //Express Setup
