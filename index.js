@@ -2,7 +2,76 @@ var app = require('express')();
 var express = require('express');
 var path = require('path');
 var http = require('http').Server(app);
+require('dotenv').load()
+var ensure_login = require('connect-ensure-login')
 const PORT = process.env.PORT || 5000
+
+//Hashing
+var bcrypt = require('bcrypt');
+const saltRounds = process.env.SALTROUNDS;
+
+//Databse
+const { Pool, Client } = require('pg')
+
+//Passport
+var passport = require('passport');
+var Strategy = require('passport-local').Strategy;
+
+passport.use(new Strategy((username, password, cb) => {
+  const client = new Client({
+    connectionString: process.env.DATAURI,
+    ssl: true,
+  });
+  client.connect();
+  client.query("SELECT id, username, password FROM users WHERE username='" + username + "'", (err, res) => {
+    if (err) {
+      console.log(err)
+    } else {
+      console.log("Database username = " + res.rows[0].username)
+      console.log("Databse id = " + res.rows[0].id);
+      if (username == res.rows[0].username) {
+        bcrypt.compare(password, res.rows[0].password, function(err, answer) {
+          if (answer == true) {
+            cb(null, { id: res.rows[0].id, username: res.rows[0].username})
+            console.log("logged in!")
+
+          }
+        });
+      } else {
+        cb(null, false)
+      }
+    }
+    client.end();
+  })
+  
+}))
+
+passport.serializeUser(function(user, done) {
+  console.log(user);
+  done(null, JSON.stringify(user));
+});
+
+passport.deserializeUser(function(packet, done) {
+  done(null, JSON.parse(packet));
+});
+
+//Express Setup
+app.set('views', __dirname + '/views');
+app.set('view engine', 'ejs');
+app.use(require('cookie-parser')());
+app.use(require('body-parser').urlencoded({ extended: true }));
+app.use(require('express-session')({ secret: 'keyboard cat', resave: false, saveUninitialized: false }));
+
+// Initialize Passport and restore authentication state, if any, from the
+// session.
+/*app.use(passport.initialize());
+app.use(passport.session());*/
+
+app.use(function(req, res, next){
+  res.locals.user = req.user || null
+  next();
+})
+
 
 //Routers
 var webRouter = require('./routers/webRouter');
@@ -15,13 +84,15 @@ app.use('/static', express.static(path.join(__dirname, 'public')))
 app.use('/', webRouter)
 app.use('/app', appRouter)
 
-//The 404 Route
 
+
+//The 404 Route
 app.get('*', function(req, res){
-  res.sendFile(__dirname + '/public/404.html');
+  res.render('404')
 });
 
+//Server
 http.listen(PORT, function(){
-    console.log("Starting Server");
-    console.log(`Listening on *:${PORT}`);
+  console.log("Starting Server");
+  console.log(`Listening on *:${PORT}`);
 });   
