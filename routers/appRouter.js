@@ -2,6 +2,8 @@ var express = require('express')
 var router = express.Router()
 var path = require('path');
 var passport = require('passport');
+require('dotenv').load()
+const { Pool, Client } = require('pg')
 
 //Middleware
 router.use(passport.initialize());
@@ -15,6 +17,12 @@ router.get('/', isLoggedIn, function(req, res){
 //Serve Duework Page
 router.get('/duework', isLoggedIn, function(req, res){
     res.render('app/duework');
+});
+
+//Serve Subjects Page
+router.get('/subjects', isLoggedIn, function(req, res){
+    data = Query("SELECT id, subjectName FROM subjects WHERE userID=" + req.user.id)
+    res.render('app/subjects');
 });
 
 //Serve Login Page
@@ -55,6 +63,25 @@ function isLoggedIn(req, res, next) {
     }
     return res.redirect('/app/login');
   }
+
+//Database
   
+function Query(query) {
+    const client = new Client({
+        connectionString: process.env.DATAURI,
+        ssl: true,
+    });
+    client.connect();
+    client.query(query, (err, res) => {
+        if (err) {
+            console.log(err);
+        } else {
+            client.end();
+            console.log(res.rows);
+            return res;
+        }
+    })
+
+}
 
 module.exports = router
