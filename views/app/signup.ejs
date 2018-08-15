@@ -1,6 +1,6 @@
 <html>
     <head>
-        <title>Homework - Login</title>
+        <title>Homework - Signup</title>
         
         <!--CSS-->
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
@@ -12,14 +12,14 @@
     <body>
         <!--Header-->
         <%- include ../header.ejs %>
-        <p><strong><%- infomation %></strong></p>
-        <h1>Login Page</h1>
+        <h1>Sign Up</h1>
         <form method="POST">
             Username: <input type="text" name="username"><br>
-            Password: <input type="password" name="password"><br>
-            <input type="submit" value="Login">
+            Email: <input type="email" name="email"><br>
+            First Name: <input type="text" name="firstname"><br>
+            Last Name: <input type="text" name="lastname"><br>
+            Password: <input type="text" name="password"><br>
+            <input type="submit" value="Sign Up">
         </form>
-
-        <p>Don't have an account? <a href="/app/signup/">Sign Up</a></p>
     </body>
 </html>

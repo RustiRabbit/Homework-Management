@@ -3,7 +3,6 @@ var express = require('express');
 var path = require('path');
 var http = require('http').Server(app);
 require('dotenv').load()
-var ensure_login = require('connect-ensure-login')
 const PORT = process.env.PORT || 5000
 
 //Hashing
@@ -23,7 +22,7 @@ passport.use(new Strategy((username, password, cb) => {
     ssl: true,
   });
   client.connect();
-  client.query("SELECT id, username, password FROM users WHERE username='" + username + "'", (err, res) => {
+  client.query("SELECT id, username, password, firstname, lastname, email, type FROM users WHERE username='" + username + "'", (err, res) => {
     if (err) {
       console.log(err)
     } else {
@@ -32,7 +31,7 @@ passport.use(new Strategy((username, password, cb) => {
       if (username == res.rows[0].username) {
         bcrypt.compare(password, res.rows[0].password, function(err, answer) {
           if (answer == true) {
-            cb(null, { id: res.rows[0].id, username: res.rows[0].username})
+            cb(null, { id: res.rows[0].id, username: res.rows[0].username, firstname: res.rows[0].firstname, lastname: res.rows[0].lastname, email: res.rows[0].email, type: res.rows[0].type})
             console.log("logged in!")
 
           }
