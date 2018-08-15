@@ -22,7 +22,7 @@ passport.use(new Strategy((username, password, cb) => {
     ssl: false,
   });
   client.connect();
-  client.query("SELECT id, username, password, firstname, lastname, email, typex FROM users WHERE username='" + username + "'", (err, res) => {
+  client.query("SELECT id, username, password, firstname, lastname, email, type FROM users WHERE username='" + username + "'", (err, res) => {
     if (err) {
       console.log(err)
     } else {
