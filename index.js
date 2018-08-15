@@ -3,7 +3,6 @@ var express = require('express');
 var path = require('path');
 var http = require('http').Server(app);
 require('dotenv').load()
-var ensure_login = require('connect-ensure-login')
 const PORT = process.env.PORT || 5000
 
 //Hashing
@@ -20,10 +19,10 @@ var Strategy = require('passport-local').Strategy;
 passport.use(new Strategy((username, password, cb) => {
   const client = new Client({
     connectionString: process.env.DATAURI,
-    ssl: true,
+    ssl: false,
   });
   client.connect();
-  client.query("SELECT id, username, password, firstname, lastname, email, type FROM users WHERE username='" + username + "'", (err, res) => {
+  client.query("SELECT id, username, password, firstname, lastname, email, typex FROM users WHERE username='" + username + "'", (err, res) => {
     if (err) {
       console.log(err)
     } else {
