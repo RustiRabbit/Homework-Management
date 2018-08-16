@@ -1,7 +1,7 @@
 # Homework-Management
 A homework manager that helps you remember and do you homework 
 
-# Features
+## Features
 The features that are in the project are
 - [x] Password Hashing
 - [ ] Due Work (With Notifictions)
@@ -10,7 +10,11 @@ The features that are in the project are
 - [ ] Connect to Google Classroom
 - [ ] OAuth with Google, Office 365 & Facebook
 
-# How to run it
+## Contributing
+
+  [Click here to Contribute](CONTRIBUTING.md)
+
+## How to run it
 - Install Node.js (and npm)
 - Clone the project
 - Run `npm install`
@@ -20,5 +24,3 @@ The features that are in the project are
 **Please always use the Development branch**
 
 **For the Databse you will need to make a database from what you see (use your programmer intuition). I'll create a script for this one day**
-
-You could also make a PR?
