@@ -1,6 +1,6 @@
 # Contributing to Homework-Management
 
-👍🎉 First off, thanks for taking the time to contribute! 🎉👍
+👍🎉 First off, thanks for taking the time to contribute! 🎉👍 <br>
 This is mostly just guidlines (not rules). Always use your judgement and feel free to propose a change to this page! 
 
 #### Table of Contents
@@ -9,7 +9,7 @@ This is mostly just guidlines (not rules). Always use your judgement and feel fr
 
 [Creating an issue](#creating-an-issue)
 
-[How to create a PR](#how-to-create-a-PR)
+[How to create a PR](#how-to-create-a-pr)
 
 ### How to run the code
 - Clone the Code
@@ -28,6 +28,6 @@ Thanks for creating an issue! In order for us (or the community) to help you nee
 #### How to create a PR
 Thanks again for creating a PR! In order for you to have a creater chance of getting your PR merged, here are some of the things that
 you should do:
-- **ALWAYS REQUEST TO THE `Development` BRANCH**. Please do this!
+- **ALWAYS REQUEST YOUR PR TO THE `Development` BRANCH**. Please do this!
 - Give us some infomation about what your PR does
 - If it fixes a issue, please give us the issue link so that we can close it
