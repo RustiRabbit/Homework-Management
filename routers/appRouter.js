@@ -32,7 +32,7 @@ router.get('/signup', function(req, res){
 router.post('/signup', function(req, res, next){
     const client = new Client({
         connectionString: process.env.DATAURI,
-        ssl: true,
+        ssl: false,
     });
     client.connect();
     var hashPassword = "";
@@ -60,8 +60,21 @@ router.get('/duework', isLoggedIn, function(req, res){
 
 //Serve Subjects Page
 router.get('/subjects', isLoggedIn, function(req, res){
-    data = Query("SELECT id, subjectName FROM subjects WHERE userID=" + req.user.id)
-    res.render('app/subjects');
+    const client = new Client({
+        connectionString: process.env.DATAURI,
+        ssl: false,
+    });
+    client.connect();
+    client.query("SELECT id, subjectName, userID FROM subjects WHERE userID=" + req.user.id, (err, responce) => {
+        if (err) {
+            res.send(err);
+        } else {
+            client.end();
+            console.log(responce.rows);
+            res.render('app/subjects', {data: responce.rows});
+        }
+    })
+
 });
 
 //Serve Login Page
@@ -108,7 +121,7 @@ function isLoggedIn(req, res, next) {
 function Query(query) {
     const client = new Client({
         connectionString: process.env.DATAURI,
-        ssl: true,
+        ssl: false,
     });
     client.connect();
     client.query(query, (err, res) => {
