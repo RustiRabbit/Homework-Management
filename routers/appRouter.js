@@ -6,6 +6,9 @@ require('dotenv').load()
 const { Pool, Client } = require('pg')
 const bodyParser = require("body-parser");
 
+//Database
+var databaseSQL = false;
+
 //Hashing
 var bcrypt = require('bcrypt');
 const saltRounds = process.env.SALTROUNDS;
@@ -32,7 +35,7 @@ router.get('/signup', function(req, res){
 router.post('/signup', function(req, res, next){
     const client = new Client({
         connectionString: process.env.DATAURI,
-        ssl: false,
+        ssl: databaseSQL,
     });
     client.connect();
     var hashPassword = "";
@@ -62,7 +65,7 @@ router.get('/duework', isLoggedIn, function(req, res){
 router.get('/subjects', isLoggedIn, function(req, res){
     const client = new Client({
         connectionString: process.env.DATAURI,
-        ssl: false,
+        ssl: databaseSQL,
     });
     client.connect();
     client.query("SELECT id, subjectName, userID FROM subjects WHERE userID=" + req.user.id, (err, responce) => {
@@ -121,7 +124,7 @@ function isLoggedIn(req, res, next) {
 function Query(query) {
     const client = new Client({
         connectionString: process.env.DATAURI,
-        ssl: false,
+        ssl: databaseSQL,
     });
     client.connect();
     client.query(query, (err, res) => {
