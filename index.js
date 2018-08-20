@@ -16,10 +16,11 @@ const { Pool, Client } = require('pg')
 var passport = require('passport');
 var Strategy = require('passport-local').Strategy;
 
+//Passport Local 
 passport.use(new Strategy((username, password, cb) => {
   const client = new Client({
     connectionString: process.env.DATAURI,
-    ssl: true,
+    ssl: false,
   });
   client.connect();
   client.query("SELECT id, username, password, firstname, lastname, email, type FROM users WHERE username='" + username + "'", (err, res) => {
@@ -45,11 +46,13 @@ passport.use(new Strategy((username, password, cb) => {
   
 }))
 
+//Serialize Users (Add them to req)
 passport.serializeUser(function(user, done) {
   console.log(user);
   done(null, JSON.stringify(user));
 });
 
+//Deserialize Users (Remove them from req)
 passport.deserializeUser(function(packet, done) {
   done(null, JSON.parse(packet));
 });

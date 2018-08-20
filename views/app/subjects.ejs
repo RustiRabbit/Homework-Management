@@ -12,5 +12,19 @@
     <body>
         <%- include header.ejs %>
         <h1>Subjects</h1>
+        <table style="border: 1px solid black; border-collapse: collapse; width:100%    ">
+            <tr>
+                <th>Subject ID</th>
+                <th>User ID</th>
+                <th>Subject Name</th>
+            </tr>
+            <% for(var i = 0; i < data.length; i++) { %> 
+            <tr>
+                <td><%= data[i].id %></td>
+                <td><%= data[i].userid %></td>
+                <td><%= data[i].subjectname %></td>
+            </tr>
+            <% } %>
+        </table>
     </body>
 </html>
