@@ -86,12 +86,16 @@ app.use('/static', express.static(path.join(__dirname, 'public')))
 app.use('/', webRouter)
 app.use('/app', appRouter)
 
-
+//The 404 Route
+app.get('/app/*', function(req, res){
+  res.render('app/404')
+});
 
 //The 404 Route
-app.get('*', function(req, res){
+app.get('/*', function(req, res){
   res.render('404')
 });
+
 
 //Server
 http.listen(PORT, function(){
