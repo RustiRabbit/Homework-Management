@@ -7,7 +7,7 @@ const { Pool, Client } = require('pg')
 const bodyParser = require("body-parser");
 
 //Database
-var databaseSQL = false;
+var databaseSQL = true  ;
 
 //Hashing
 var bcrypt = require('bcrypt');
