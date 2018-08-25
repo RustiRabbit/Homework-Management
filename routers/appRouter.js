@@ -7,7 +7,7 @@ const { Pool, Client } = require('pg')
 const bodyParser = require("body-parser");
 
 //Database
-var databaseSQL = true  ;
+var databaseSQL = true;
 
 //Hashing
 var bcrypt = require('bcrypt');
@@ -63,6 +63,7 @@ router.get('/duework', isLoggedIn, function(req, res){
 
 //Serve Subjects Page
 router.get('/subjects', isLoggedIn, function(req, res){
+    var message = req.query.message
     const client = new Client({
         connectionString: process.env.DATAURI,
         ssl: databaseSQL,
@@ -72,10 +73,11 @@ router.get('/subjects', isLoggedIn, function(req, res){
         if (err) {
             res.send(err);
         } else {
-            client.end();
             console.log(responce.rows);
-            res.render('app/subjects', {data: responce.rows});
+            res.render('app/subjects', {data: responce.rows,
+                                        message: message    });
         }
+        client.end();
     })
 
 });
@@ -83,6 +85,28 @@ router.get('/subjects', isLoggedIn, function(req, res){
 //Serve Subjects Create Page
 router.get('/subjects/create', isLoggedIn, function(req, res) {
     res.render('app/create-subject')
+});
+
+router.post('/subjects/create', function(req, res, next){
+    const client = new Client({
+        connectionString: process.env.DATAURI,
+        ssl: databaseSQL,
+    });
+    var query = {
+        text: "INSERT INTO subjects (subjectname, userid) VALUES ($1, (SELECT id FROM users WHERE id=$2))",
+        values: [req.body.subjectname, req.user.id]
+    }
+    client.connect();
+    client.query(query, (err, responce) => {
+        if (err) {
+            console.log(req.user.id);
+            res.send(err);
+        } else {
+            console.log("Added new Subject")
+            res.redirect('/app/subjects?message=Added%20A%20New%20Subject');
+        }
+        client.end();
+    })
 });
 
 //Serve Login Page
