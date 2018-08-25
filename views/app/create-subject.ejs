@@ -11,21 +11,10 @@
     </head>
     <body>
         <%- include header.ejs %>
-        <h1>Subjects</h1>
-        <table style="border: 1px solid black; border-collapse: collapse; width:100%    ">
-            <tr>
-                <th>Subject ID</th>
-                <th>User ID</th>
-                <th>Subject Name</th>
-            </tr>
-            <% for(var i = 0; i < data.length; i++) { %> 
-            <tr>
-                <td><%= data[i].id %></td>
-                <td><%= data[i].userid %></td>
-                <td><%= data[i].subjectname %></td>
-            </tr>
-            <% } %>
-        </table>
-        <a href="/app/subjects/create">Create a new Subject</a>
+        <h1>Create a Subject</h1>
+        <form method="POST"> 
+            Subject Name: <input type="text" name="subjectName"> <br>
+            <input type="submit" value="Create">
+        </form>
     </body>
 </html>

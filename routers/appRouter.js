@@ -80,6 +80,11 @@ router.get('/subjects', isLoggedIn, function(req, res){
 
 });
 
+//Serve Subjects Create Page
+router.get('/subjects/create', isLoggedIn, function(req, res) {
+    res.render('app/create-subject')
+});
+
 //Serve Login Page
 router.get('/login', function(req, res){
     var message = req.query.error;
