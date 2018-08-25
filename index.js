@@ -20,7 +20,7 @@ var Strategy = require('passport-local').Strategy;
 passport.use(new Strategy((username, password, cb) => {
   const client = new Client({
     connectionString: process.env.DATAURI,
-    ssl: false,
+    ssl: true,
   });
   client.connect();
   client.query("SELECT id, username, password, firstname, lastname, email, type FROM users WHERE username='" + username + "'", (err, res) => {
@@ -35,10 +35,13 @@ passport.use(new Strategy((username, password, cb) => {
             cb(null, { id: res.rows[0].id, username: res.rows[0].username, firstname: res.rows[0].firstname, lastname: res.rows[0].lastname, email: res.rows[0].email, type: res.rows[0].type})
             console.log("logged in!")
 
+          } else {
+            console.log("Wrong Password")
           }
         });
       } else {
         cb(null, false)
+        console.log("Wrong Username")
       }
     }
     client.end();
