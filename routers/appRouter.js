@@ -145,7 +145,7 @@ function isLoggedIn(req, res, next) {
     if(req.isAuthenticated()) {
       return next();
     }
-    return res.redirect('/app/login');
+    return res.redirect('/app/login?error=You%20need%20to%20be%20logged%20in%20to%20do%20this);
   }
 
 //Database
