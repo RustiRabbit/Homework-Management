@@ -58,7 +58,22 @@ router.post('/signup', function(req, res, next){
   
 //Serve Duework Page
 router.get('/duework', isLoggedIn, function(req, res){
-    res.render('app/duework');
+    var message = req.query.message
+    const client = new Client({
+        connectionString: process.env.DATAURI,
+        ssl: databaseSQL,
+    });
+    client.connect();
+    client.query("SELECT id, subjectid, userid, worklabel, duedate, complete FROM duework WHERE userid=$1", [req.user.id], (err, responce) => {
+        if (err) {
+            res.send(err);
+        } else {
+            console.log(responce.rows);
+            res.render('app/duework', {data: responce.rows,
+                                        message: message});
+        }
+        client.end();
+    })
 });
 
 //Serve Subjects Page
@@ -145,8 +160,8 @@ function isLoggedIn(req, res, next) {
     if(req.isAuthenticated()) {
       return next();
     }
-    return res.redirect('/app/login?error=You%20need%20to%20be%20logged%20in%20to%20do%20this);
-  }
+    return res.redirect('/app/login?error=You%20need%20to%20be%20logged%20in%20to%20do%20this');
+}
 
 //Database
   

@@ -11,6 +11,27 @@
     </head>
     <body>
         <%- include header.ejs %>
+        <p><strong><%- message %></strong></p>
         <h1>Duework</h1>
+        <table style="border: 1px solid black; border-collapse: collapse; width:100%">
+            <tr>
+                <th>Duework ID</th>
+                <th>Subject ID</th>
+                <th>User ID</th>
+                <th>Duework Label</th>
+                <th>Due Date</th>
+                <th>Complete</th>
+            </tr>
+            <% for(var i = 0; i < data.length; i++) { %> 
+            <tr>
+                <td><%= data[i].id %></td>
+                <td><%= data[i].subjectid %></td>
+                <td><%= data[i].userid %></td>
+                <td><%= data[i].worklabel %></td>
+                <td><%= data[i].duedate %></td>
+                <td><%= data[i].complete %></td>
+            </tr>
+            <% } %>
+        </table>
     </body>
 </html>
