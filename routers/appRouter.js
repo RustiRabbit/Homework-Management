@@ -52,8 +52,6 @@ router.post('/signup', function(req, res, next){
             res.redirect('/app/login');
         })
     });
-    
-
 });
   
 //Serve Duework Page
@@ -75,6 +73,11 @@ router.get('/duework', isLoggedIn, function(req, res){
         client.end();
     })
 });
+
+//Serve Duework Create
+router.get('/duework/create', isLoggedIn, function(req, res){
+    res.render('app/create-duework')
+})
 
 //Serve Subjects Page
 router.get('/subjects', isLoggedIn, function(req, res){
