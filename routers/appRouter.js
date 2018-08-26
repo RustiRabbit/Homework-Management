@@ -52,8 +52,6 @@ router.post('/signup', function(req, res, next){
             res.redirect('/app/login');
         })
     });
-    
-
 });
   
 //Serve Duework Page
@@ -71,6 +69,50 @@ router.get('/duework', isLoggedIn, function(req, res){
             console.log(responce.rows);
             res.render('app/duework', {data: responce.rows,
                                         message: message});
+        }
+        client.end();
+    })
+});
+
+//Serve Duework Create
+router.get('/duework/create', isLoggedIn, function(req, res){
+    const client = new Client({
+        connectionString: process.env.DATAURI,
+        ssl: databaseSQL,
+    });
+    client.connect();
+    client.query("SELECT id, subjectname FROM subjects WHERE userid=$1", [req.user.id], (err, responce) => {
+        if (err) {
+            res.send(err);
+        } else {
+            console.log(responce.rows);
+            res.render('app/create-duework', {data: responce.rows});
+        }
+        client.end();
+    })
+});
+
+router.post('/duework/create', function(req, res, next){
+    req.body.duedate = new Date();
+    console.log("Duework Create POST")
+    console.log("Due Date: " + req.body.duedate);
+
+    const client = new Client({
+        connectionString: process.env.DATAURI,
+        ssl: databaseSQL,
+    });
+    var query = {
+        text: "INSERT INTO duework (subjectid, userid, worklabel, duedate, complete) VALUES ((SELECT id FROM subjects WHERE id=$1), (SELECT id FROM users WHERE id=$2), $3, $4, $5)",
+        values: [req.body.subject, req.user.id, req.body.worklabel, req.body.duedate, req.body.completed]
+    }
+    client.connect();
+    client.query(query, (err, responce) => {
+        if (err) {
+            console.log(req.user.id);
+            res.send(err);
+        } else {
+            console.log("Added a new DueWork")
+            res.redirect('/app/duework?message=Added%20A%20New%20Subject');
         }
         client.end();
     })
