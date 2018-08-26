@@ -15,8 +15,14 @@
         <form method="POST"> 
             DueWork Name: <input type="text" name="worklabel"> <br>
             Date Due: <input type="date" name="datedue"> <br>
+            Subject: <select name="subject">
+                <% for(var i = 0; i < data.length; i++) { %> 
+                    <option value="<%= data[i].id %>"><%= data[i].subjectname %></option>
+                <% } %>
+            </select> <br>
             Completed: <input type="checkbox" name="completed"> <br>
             <input type="submit" value="Create">
         </form>
+
     </body>
 </html>
