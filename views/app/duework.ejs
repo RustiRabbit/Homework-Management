@@ -32,8 +32,12 @@
                 <td><%= data[i].subjectid %></td>
                 <td><%= data[i].userid %></td>
                 <td><%= data[i].worklabel %></td>
-                <td><%= data[i].duedate %></td>
+                <td id='<%= i %>'></td>
                 <td><%= data[i].complete %></td>
+                <script>
+                var time = moment('<%= data[i].duedate %>').format("dddd MMMM, YYYY");
+                document.getElementById('<%= i %>').innerHTML = time;
+                </script>
             </tr>
             <% } %>
         </table>
