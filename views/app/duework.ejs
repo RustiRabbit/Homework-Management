@@ -35,7 +35,7 @@
                 <td id='<%= i %>'></td>
                 <td><%= data[i].complete %></td>
                 <script>
-                var time = moment('<%= data[i].duedate %>').format("dddd MMMM, YYYY");
+                var time = moment('<%= data[i].duedate %>').format("DD dddd, MMMM, YYYY");
                 document.getElementById('<%= i %>').innerHTML = time;
                 </script>
             </tr>

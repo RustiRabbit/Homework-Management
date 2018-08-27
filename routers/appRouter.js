@@ -62,7 +62,7 @@ router.get('/duework', isLoggedIn, function(req, res){
         ssl: databaseSQL,
     });
     client.connect();
-    client.query("SELECT id, subjectid, userid, worklabel, duedate, complete FROM duework WHERE userid=$1", [req.user.id], (err, responce) => {
+    client.query("SELECT id, subjectid, userid, worklabel, duedate, complete FROM duework WHERE userid=$1 ORDER BY duedate ASC", [req.user.id], (err, responce) => {
         if (err) {
             res.send(err);
         } else {
