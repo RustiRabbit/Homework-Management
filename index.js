@@ -26,7 +26,7 @@ var Strategy = require('passport-local').Strategy;
 passport.use(new Strategy((username, password, cb) => {
   const client = new Client({
     connectionString: process.env.DATAURI,
-    ssl: process.env.datauseSSL,
+    ssl: datauseSSL,
   });
   client.connect();
   client.query("SELECT id, username, password, firstname, lastname, email, type FROM users WHERE username='" + username + "'", (err, res) => {
