@@ -7,7 +7,12 @@ const { Pool, Client } = require('pg')
 const bodyParser = require("body-parser");
 
 //Database
-var databaseSQL = false;
+var datauseSSL;
+if (process.env.DATASUPPORTSSL == "false") {
+  datauseSSL = false;
+} else {
+  datauseSSL = true;
+}
 
 //Hashing
 var bcrypt = require('bcrypt');
@@ -35,7 +40,7 @@ router.get('/signup', function(req, res){
 router.post('/signup', function(req, res, next){
     const client = new Client({
         connectionString: process.env.DATAURI,
-        ssl: databaseSQL,
+        ssl: datauseSSL,
     });
     client.connect();
     var hashPassword = "";
@@ -56,9 +61,10 @@ router.post('/signup', function(req, res, next){
   
 //Serve Duework Page
 router.get('/duework', isLoggedIn, function(req, res){
-    var message = req.query.message    const client = new Client({
+    var message = req.query.message;
+    const client = new Client({
         connectionString: process.env.DATAURI,
-        ssl: databaseSQL,
+        ssl: datauseSSL,
     });
     client.connect();
     client.query("SELECT id, subjectid, userid, worklabel, duedate, complete FROM duework WHERE userid=$1 ORDER BY duedate ASC", [req.user.id], (err, responce) => {
@@ -77,7 +83,7 @@ router.get('/duework', isLoggedIn, function(req, res){
 router.get('/duework/create', isLoggedIn, function(req, res){
     const client = new Client({
         connectionString: process.env.DATAURI,
-        ssl: databaseSQL,
+        ssl: datauseSSL,
     });
     client.connect();
     client.query("SELECT id, subjectname FROM subjects WHERE userid=$1", [req.user.id], (err, responce) => {
@@ -100,7 +106,7 @@ router.post('/duework/create', function(req, res, next){
     }
     const client = new Client({
         connectionString: process.env.DATAURI,
-        ssl: databaseSQL,
+        ssl: datauseSSL,
     });
     var query = {
         text: "INSERT INTO duework (subjectid, userid, worklabel, duedate, complete) VALUES ((SELECT id FROM subjects WHERE id=$1), (SELECT id FROM users WHERE id=$2), $3, $4, $5)",
@@ -124,7 +130,7 @@ router.get('/subjects', isLoggedIn, function(req, res){
     var message = req.query.message
     const client = new Client({
         connectionString: process.env.DATAURI,
-        ssl: databaseSQL,
+        ssl: datauseSSL,
     });
     client.connect();
     client.query("SELECT id, subjectName, userID FROM subjects WHERE userID=" + req.user.id, (err, responce) => {
@@ -148,7 +154,7 @@ router.get('/subjects/create', isLoggedIn, function(req, res) {
 router.post('/subjects/create', function(req, res, next){
     const client = new Client({
         connectionString: process.env.DATAURI,
-        ssl: databaseSQL,
+        ssl: datauseSSL,
     });
     var query = {
         text: "INSERT INTO subjects (subjectname, userid) VALUES ($1, (SELECT id FROM users WHERE id=$2))",
@@ -211,7 +217,7 @@ function isLoggedIn(req, res, next) {
 function Query(query) {
     const client = new Client({
         connectionString: process.env.DATAURI,
-        ssl: databaseSQL,
+        ssl: datauseSSL,
     });
     client.connect();
     client.query(query, (err, res) => {

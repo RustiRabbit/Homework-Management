@@ -11,6 +11,12 @@ const saltRounds = process.env.SALTROUNDS;
 
 //Databse
 const { Pool, Client } = require('pg')
+var datauseSSL;
+if (process.env.DATASUPPORTSSL == "false") {
+  datauseSSL = false;
+} else {
+  datauseSSL = true;
+}
 
 //Passport
 var passport = require('passport');
@@ -20,7 +26,7 @@ var Strategy = require('passport-local').Strategy;
 passport.use(new Strategy((username, password, cb) => {
   const client = new Client({
     connectionString: process.env.DATAURI,
-    ssl: true,
+    ssl: process.env.datauseSSL,
   });
   client.connect();
   client.query("SELECT id, username, password, firstname, lastname, email, type FROM users WHERE username='" + username + "'", (err, res) => {
