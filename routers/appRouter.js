@@ -7,7 +7,7 @@ const { Pool, Client } = require('pg')
 const bodyParser = require("body-parser");
 
 //Database
-var databaseSQL = true;
+var databaseSQL = false;
 
 //Hashing
 var bcrypt = require('bcrypt');
@@ -56,8 +56,7 @@ router.post('/signup', function(req, res, next){
   
 //Serve Duework Page
 router.get('/duework', isLoggedIn, function(req, res){
-    var message = req.query.message
-    const client = new Client({
+    var message = req.query.message    const client = new Client({
         connectionString: process.env.DATAURI,
         ssl: databaseSQL,
     });
@@ -95,8 +94,10 @@ router.get('/duework/create', isLoggedIn, function(req, res){
 router.post('/duework/create', function(req, res, next){
     req.body.duedate = new Date();
     console.log("Duework Create POST")
-    console.log("Due Date: " + req.body.duedate);
-
+    //Fix Completed (This fixes a Bug)
+    if (req.body.completed == null) {
+        req.body.completed = false;
+    }
     const client = new Client({
         connectionString: process.env.DATAURI,
         ssl: databaseSQL,
