@@ -98,8 +98,8 @@ router.get('/duework/create', isLoggedIn, function(req, res){
 });
 
 router.post('/duework/create', function(req, res, next){
-    req.body.duedate = new Date();
     console.log("Duework Create POST")
+    console.log("duedate without date(): " + req.body.duedate);
     //Fix Completed (This fixes a Bug)
     if (req.body.completed == null) {
         req.body.completed = false;

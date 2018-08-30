@@ -5,16 +5,19 @@
         <!--CSS-->
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
         <link rel="stylesheet" href="/static/css/navigation.css">
+        <link rel="stylesheet" href="/static/css/pikeadate.css" type="text/css"/>
 
         <!--Javascript-->
         <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+        <script src="/static/js/pikeadate.js"></script>
+        <script src="/static/js/moment.js"></script>
     </head>
     <body>
         <%- include header.ejs %>
         <h1>Create a new Due Work</h1>
         <form method="POST"> 
             DueWork Name: <input type="text" name="worklabel"> <br>
-            Date Due: <input type="date" name="datedue"> <br>
+            Date Due: <input type="text" id="datepicker" value="30 Aug 2018" name="duedate" ><br>
             Subject: <select name="subject">
                 <% for(var i = 0; i < data.length; i++) { %> 
                     <option value="<%= data[i].id %>"><%= data[i].subjectname %></option>
@@ -24,5 +27,17 @@
             <input type="submit" value="Create">
         </form>
 
+        <div id="selected"></div>
+
+        <script type="text/javascript">
+            var picker = new Pikaday({
+                field: document.getElementById('datepicker'),
+                onSelect: function() {
+                    //var date = document.createTextNode(this.getMoment().format('Do MMMM YYYY') + ' ');
+                    //document.getElementById('selected').appendChild(date);
+                }
+            });
+            picker.setMoment(moment().dayOfYear(366));
+        </script>
     </body>
 </html>
