@@ -1,9 +1,13 @@
 var app = require('express')();
 var express = require('express');
 var path = require('path');
-var http = require('http').Server(app);
+var http = require('http')
 require('dotenv').load()
 const PORT = process.env.PORT || 5000
+
+//Server Var Creation
+//Server
+var server = http.createServer(app);
 
 //Hashing
 var bcrypt = require('bcrypt');
@@ -95,15 +99,30 @@ app.use('/static', express.static(path.join(__dirname, 'public')))
 app.use('/', webRouter)
 app.use('/app', appRouter)
 
-
-
 //The 404 Route
 app.get('*', function(req, res){
   res.render('404')
 });
 
-//Server
-http.listen(PORT, function(){
+//Server Close Functions (Everything should lead to this)
+function ServerClose(serverclose) {
+  console.log("*** Closing Server ***")
+  //This works out if you are closing the server forcfully (Ctrl+C) or closing server.close).
+  //If you aren't using server.close, than close the process, otherwise server.close will do it for you
+  if(serverclose == false) {
+    process.exit(1);
+  }
+}
+
+server.on('close', function() {ServerClose(true);})
+
+//Fixes Ctrl+C
+process.on('SIGINT', function() {
+  ServerClose();
+});
+
+//Listen
+server.listen(PORT, function(){
   console.log("Starting Server");
   console.log(`Listening on *:${PORT}`);
 });   
