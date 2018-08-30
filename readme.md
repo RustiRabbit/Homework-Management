@@ -4,11 +4,9 @@ A homework manager that helps you remember and do you homework
 ## Features
 The features that are in the project are
 - [x] Password Hashing
-- [ ] Due Work (With Notifictions)
-- [ ] Smart Setup (Walks you through setting up this)
-- [ ] Connect to Schoolbox (https://schoolbox.com.au/) (Will need to Scrap it)
+- [x] Due Work
 - [ ] Connect to Google Classroom
-- [ ] OAuth with Google, Office 365 & Facebook
+- [ ] OAuth with Google & Facebook
 
 ## Contributing
 
@@ -18,9 +16,9 @@ The features that are in the project are
 - Install Node.js (and npm)
 - Clone the project
 - Run `npm install`
-- Open `.env.example` and fill it out (you need a postgresql database for `DATAURI` & pick a random number for `SALTROUNDS`)
-- Run `npm start` and go to http://localhost:3000
+- Open `.env.example` and fill it out (you need a postgresql database for `DATAURI`, pick a random number for `SALTROUNDS` & select `true or false` in `DATASUPPORTSSL`)
+- Run `npm start` and go to http://localhost:5000
 
 **Please always use the Development branch**
 
-**For the Databse you will need to make a database from what you see (use your programmer intuition). I'll create a script for this one day**
+**For the Database, you will need to make one (one day I will make a script that will do this, but for now, you need to create the database yourself).** Or you could make a PR that has one?
