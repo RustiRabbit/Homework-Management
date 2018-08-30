@@ -212,24 +212,5 @@ function isLoggedIn(req, res, next) {
     return res.redirect('/app/login?error=You%20need%20to%20be%20logged%20in%20to%20do%20this');
 }
 
-//Database
-  
-function Query(query) {
-    const client = new Client({
-        connectionString: process.env.DATAURI,
-        ssl: datauseSSL,
-    });
-    client.connect();
-    client.query(query, (err, res) => {
-        if (err) {
-            console.log(err);
-        } else {
-            client.end();
-            console.log(res.rows);
-            return res;
-        }
-    })
-
-}
 
 module.exports = router
