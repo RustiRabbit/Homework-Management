@@ -22,17 +22,19 @@ if (process.env.DATASUPPORTSSL == "false") {
   datauseSSL = true;
 }
 
+//Database
+const client = new Client({
+  connectionString: process.env.DATAURI,
+  ssl: datauseSSL,
+});
+client.connect();
+
 //Passport
 var passport = require('passport');
 var Strategy = require('passport-local').Strategy;
 
 //Passport Local 
 passport.use(new Strategy((username, password, cb) => {
-  const client = new Client({
-    connectionString: process.env.DATAURI,
-    ssl: datauseSSL,
-  });
-  client.connect();
   client.query("SELECT id, username, password, firstname, lastname, email, type FROM users WHERE username='" + username + "'", (err, res) => {
     if (err) {
       console.log(err)
@@ -108,9 +110,12 @@ app.get('*', function(req, res){
 function ServerClose(serverclose) {
   console.log("*** Closing Server ***")
   //This works out if you are closing the server forcfully (Ctrl+C) or closing server.close).
+
+  client.end();
+
   //If you aren't using server.close, than close the process, otherwise server.close will do it for you
   if(serverclose == false) {
-    process.exit(1);
+    process.exit(0);
   }
 }
 
@@ -118,7 +123,7 @@ server.on('close', function() {ServerClose(true);})
 
 //Fixes Ctrl+C
 process.on('SIGINT', function() {
-  ServerClose();
+  ServerClose(false);
 });
 
 //Listen
