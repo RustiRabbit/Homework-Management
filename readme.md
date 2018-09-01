@@ -5,8 +5,10 @@ A homework manager that helps you remember and do you homework
 The features that are in the project are
 - [x] Password Hashing
 - [x] Due Work
+- [x] OAuth with Google
 - [ ] Connect to Google Classroom
-- [ ] OAuth with Google & Facebook
+- [ ] Google Notifictions
+- [ ] iOS & Andriod App
 
 ## Contributing
 
@@ -16,7 +18,7 @@ The features that are in the project are
 - Install Node.js (and npm)
 - Clone the project
 - Run `npm install`
-- Open `.env.example` and fill it out (you need a postgresql database for `DATAURI`, pick a random number for `SALTROUNDS` & select `true or false` in `DATASUPPORTSSL`)
+- Open `.env.example` and fill it out (you need a postgresql database for `DATAURI`, pick a random number for `SALTROUNDS` & select `true or false` in `DATASUPPORTSSL`. All the Google stuff is normal OAuth Stuff)
 - Run `npm start` and go to http://localhost:5000
 
 **Please always use the Development branch**
