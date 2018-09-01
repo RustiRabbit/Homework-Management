@@ -1,9 +1,13 @@
 var app = require('express')();
 var express = require('express');
 var path = require('path');
-var http = require('http').Server(app);
+var http = require('http')
 require('dotenv').load()
 const PORT = process.env.PORT || 5000
+
+//Server Var Creation
+//Server
+var server = http.createServer(app);
 
 //Hashing
 var bcrypt = require('bcrypt');
@@ -11,6 +15,19 @@ const saltRounds = process.env.SALTROUNDS;
 
 //Databse
 const { Pool, Client } = require('pg')
+var datauseSSL;
+if (process.env.DATASUPPORTSSL == "false") {
+  datauseSSL = false;
+} else {
+  datauseSSL = true;
+}
+
+//Database
+const client = new Client({
+  connectionString: process.env.DATAURI,
+  ssl: datauseSSL,
+});
+client.connect();
 
 //Passport
 var passport = require('passport');
@@ -18,13 +35,11 @@ var Strategy = require('passport-local').Strategy;
 
 //Passport Local 
 passport.use(new Strategy((username, password, cb) => {
-  const client = new Client({
-    connectionString: process.env.DATAURI,
-    ssl: true,
-  });
-  client.connect();
   client.query("SELECT id, username, password, firstname, lastname, email, type FROM users WHERE username='" + username + "'", (err, res) => {
-    if (err) {
+    if (res.rows[0] == null) {
+      console.log("It doesn't match")
+      cb(null, false)
+    } else if (err) {
       console.log(err)
     } else {
       console.log("Database username = " + res.rows[0].username)
@@ -44,7 +59,6 @@ passport.use(new Strategy((username, password, cb) => {
         console.log("Wrong Username")
       }
     }
-    client.end();
   })
   
 }))
@@ -90,18 +104,32 @@ app.use('/', webRouter)
 app.use('/app', appRouter)
 
 //The 404 Route
-app.get('/app/*', function(req, res){
-  res.render('app/404')
-});
-
-//The 404 Route
 app.get('/*', function(req, res){
   res.render('404')
 });
 
+//Server Close Functions (Everything should lead to this)
+function ServerClose(serverclose) {
+  console.log("*** Closing Server ***")
+  //This works out if you are closing the server forcfully (Ctrl+C) or closing server.close).
 
-//Server
-http.listen(PORT, function(){
+  client.end();
+
+  //If you aren't using server.close, than close the process, otherwise server.close will do it for you
+  if(serverclose == false) {
+    process.exit(0);
+  }
+}
+
+server.on('close', function() {ServerClose(true);})
+
+//Fixes Ctrl+C
+process.on('SIGINT', function() {
+  ServerClose(false);
+});
+
+//Listen
+server.listen(PORT, function(){
   console.log("Starting Server");
   console.log(`Listening on *:${PORT}`);
 });   
