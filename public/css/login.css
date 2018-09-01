@@ -1,0 +1,19 @@
+.logincontanier {
+    text-align: center;
+    outline: 3px solid black;
+    width: 30%;
+    margin: auto;
+}
+
+label {
+    display: block;
+}
+
+#passwordlabel, usernamelabel{
+    text-align: center;
+}
+
+#passwordcontainer {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
