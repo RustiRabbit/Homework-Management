@@ -55,7 +55,6 @@ router.post('/signup', function(req, res, next){
             } else {
                 console.log('row inserted with id: ' + result.rows[0].id);
             }
-            client.end();
             res.redirect('/app/login');
         })
     });
@@ -72,7 +71,6 @@ router.get('/duework', isLoggedIn, function(req, res){
             res.render('app/duework', {data: responce.rows,
                                         message: message});
         }
-        client.end();
     })
 });
 
@@ -85,7 +83,6 @@ router.get('/duework/create', isLoggedIn, function(req, res){
             console.log(responce.rows);
             res.render('app/create-duework', {data: responce.rows});
         }
-        client.end();
     })
 });
 
@@ -108,7 +105,6 @@ router.post('/duework/create', function(req, res, next){
             console.log("Added a new DueWork")
             res.redirect('/app/duework?message=Added%20A%20New%20Subject');
         }
-        client.end();
     })
 });
 
@@ -123,7 +119,6 @@ router.get('/subjects', isLoggedIn, function(req, res){
             res.render('app/subjects', {data: responce.rows,
                                         message: message    });
         }
-        client.end();
     })
 
 });
@@ -146,7 +141,6 @@ router.post('/subjects/create', function(req, res, next){
             console.log("Added new Subject")
             res.redirect('/app/subjects?message=Added%20A%20New%20Subject');
         }
-        client.end();
     })
 });
 
@@ -163,10 +157,12 @@ router.post('/login', function (req, res, next) {
             res.status(200).send("ERROR 200. " + res);
         } else if (info) {
             res.status(401).send("401 Unauthorized")
+        } else if (!user) {
+            res.redirect('/app/login?error=You%20have%20the%20wrong%20username%20or%20password')
         } else {
             req.login(user, function(err) {
                 if (err) {
-                    res.status(500).send("REQ.LOGIN ERROR");
+                    res.status(500).send("REQ.LOGIN ERROR. Try to login again.");
                 } else {
                     res.redirect('/app')
                 }
@@ -189,10 +185,11 @@ function isLoggedIn(req, res, next) {
     return res.redirect('/app/login?error=You%20need%20to%20be%20logged%20in%20to%20do%20this');
 }
 
-exports.close = function() {
+//Fixes Ctrl+C
+process.on('SIGINT', function() {
     client.end();
-    console.log("Closed appRouter.js Database connection")
-}
+    console.log("*** CLOSED SERVER FROM appRouter.js ***")
+});
 
 
 module.exports = router

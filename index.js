@@ -36,7 +36,10 @@ var Strategy = require('passport-local').Strategy;
 //Passport Local 
 passport.use(new Strategy((username, password, cb) => {
   client.query("SELECT id, username, password, firstname, lastname, email, type FROM users WHERE username='" + username + "'", (err, res) => {
-    if (err) {
+    if (res.rows[0] == null) {
+      console.log("It doesn't match")
+      cb(null, false)
+    } else if (err) {
       console.log(err)
     } else {
       console.log("Database username = " + res.rows[0].username)
@@ -56,7 +59,6 @@ passport.use(new Strategy((username, password, cb) => {
         console.log("Wrong Username")
       }
     }
-    client.end();
   })
   
 }))
