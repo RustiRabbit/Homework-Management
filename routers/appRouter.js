@@ -179,9 +179,12 @@ router.get('/logout', function(req, res){
 
 //Google OAuth
 router.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email']}));
-router.get('/auth/google/callback',
-    passport.authenticate('google', {failureRedirect: '/app/login?'}))
 
+router.get('/auth/google/callback', 
+  passport.authenticate('google'),
+  function(req, res) {
+    res.redirect('/app')
+  });
 //Test if the app logged in
 function isLoggedIn(req, res, next) {
     if(req.isAuthenticated()) {

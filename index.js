@@ -74,6 +74,25 @@ passport.use(new GoogleStrategy({
     console.log("First Name: " + profile.name.givenName);
     console.log("Last Name: " + profile.name.familyName);
     console.log("Email: " + profile.emails[0].value)
+
+    //Query the Database
+    client.query('SELECT * FROM users WHERE googleid=$1', [profile.id], (err, res) => {
+      if (res.rows[0] == null) {
+        console.log("WE NEED TO MAKE A NEW ROW!!")
+        client.query("INSERT INTO users (firstname, lastname, email, type, logintype, googleid) VALUES ($1, $2, $3, 'user', 'google', $4)", [profile.name.givenName, profile.name.familyName, profile.emails[0].value, profile.id], (err, res) => {
+          if (err) {
+            console.log("ERROR: " + err);
+            done(null, false);
+          } else {
+            console.log("Added a new GOOGLE row");
+            done(null, {id: "You need to re-login to get a good ID reading", firstname: profile.name.givenName, lastname: profile.name.familyName, email: profile.emails[0].value, type: "User"});
+          }
+        })
+      } else {
+        done(null, {id: res.rows[0].id, firstname: res.rows[0].firstname, lastname: res.rows[0].lastname, email: res.rows[0].email, type: res.rows[0].type});
+      }
+    })
+
   }
 ));
 
