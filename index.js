@@ -64,8 +64,6 @@ passport.use(new Strategy((username, password, cb) => {
   
 }))
 
-console.log(process.env.GOOGLE_REDIRECT_URL);
-
 //Passport Google OAuth 2.0
 passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
@@ -118,8 +116,8 @@ app.use(require('express-session')({ secret: 'keyboard cat', resave: false, save
 
 // Initialize Passport and restore authentication state, if any, from the
 // session.
-/*app.use(passport.initialize());
-app.use(passport.session());*/
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use(function(req, res, next){
   res.locals.user = req.user || null
