@@ -20,6 +20,7 @@
         <h1 class="maintitle" >Duework</h1>
         <table style="border: 1px solid black; border-collapse: collapse; width:100%">
             <tr>
+                <th>Tick</th>
                 <th>Duework ID</th>
                 <th>Subject ID</th>
                 <th>User ID</th>
@@ -29,6 +30,10 @@
             </tr>
             <% for(var i = 0; i < data.length; i++) { %> 
             <tr>
+                <td><input type="checkbox" id="<%= i %>check" onchange="tickDuework(<%= data[i].id %>, this)"></td>
+                <script>
+                document.getElementById('<%= i %>check').checked = <%= data[i].complete %>;
+                </script>
                 <td><%= data[i].id %></td>
                 <td><%= data[i].subjectid %></td>
                 <td><%= data[i].userid %></td>
@@ -38,6 +43,12 @@
                 <script>
                 var time = moment('<%= data[i].duedate %>').format("DD dddd, MMMM, YYYY");
                 document.getElementById('<%= i %>').innerHTML = time;
+                </script>
+                <script>
+                    function tickDuework(id, cb) {
+                        console.log("Checkbox ID: " + id + ". Checkbox Value: " + cb.checked);
+
+                    }
                 </script>
             </tr>
             <% } %>
