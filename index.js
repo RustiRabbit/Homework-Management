@@ -32,6 +32,7 @@ client.connect();
 //Passport
 var passport = require('passport');
 var Strategy = require('passport-local').Strategy;
+var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 
 //Passport Local 
 passport.use(new Strategy((username, password, cb) => {
@@ -62,6 +63,38 @@ passport.use(new Strategy((username, password, cb) => {
   })
   
 }))
+
+//Passport Google OAuth 2.0
+passport.use(new GoogleStrategy({
+    clientID: process.env.GOOGLE_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    callbackURL: "http://localhost:5000/app/auth/google/callback"
+  }, function(accessToken, refreshToken, profile, done) {
+    console.log("Google ID: " + profile.id);
+    console.log("First Name: " + profile.name.givenName);
+    console.log("Last Name: " + profile.name.familyName);
+    console.log("Email: " + profile.emails[0].value)
+
+    //Query the Database
+    client.query('SELECT * FROM users WHERE googleid=$1', [profile.id], (err, res) => {
+      if (res.rows[0] == null) {
+        console.log("WE NEED TO MAKE A NEW ROW!!")
+        client.query("INSERT INTO users (firstname, lastname, email, type, logintype, googleid) VALUES ($1, $2, $3, 'user', 'google', $4)", [profile.name.givenName, profile.name.familyName, profile.emails[0].value, profile.id], (err, res) => {
+          if (err) {
+            console.log("ERROR: " + err);
+            done(null, false);
+          } else {
+            console.log("Added a new GOOGLE row");
+            done(null, {id: "You need to re-login to get a good ID reading", firstname: profile.name.givenName, lastname: profile.name.familyName, email: profile.emails[0].value, type: "User"});
+          }
+        })
+      } else {
+        done(null, {id: res.rows[0].id, firstname: res.rows[0].firstname, lastname: res.rows[0].lastname, email: res.rows[0].email, type: res.rows[0].type});
+      }
+    })
+
+  }
+));
 
 //Serialize Users (Add them to req)
 passport.serializeUser(function(user, done) {
