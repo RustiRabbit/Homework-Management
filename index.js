@@ -68,7 +68,7 @@ passport.use(new Strategy((username, password, cb) => {
 passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: "http://localhost:5000/app/auth/google/callback"
+    callbackURL: process.env.GOOGLE_REDIRECT_URL
   }, function(accessToken, refreshToken, profile, done) {
     console.log("Google ID: " + profile.id);
     console.log("First Name: " + profile.name.givenName);
@@ -116,14 +116,28 @@ app.use(require('express-session')({ secret: 'keyboard cat', resave: false, save
 
 // Initialize Passport and restore authentication state, if any, from the
 // session.
-/*app.use(passport.initialize());
-app.use(passport.session());*/
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use(function(req, res, next){
   res.locals.user = req.user || null
   next();
 })
 
+//Socket.io
+io.on('connection', function(socket){
+  console.log('a user connected');
+  
+  socket.on('disconnect', function(){
+    console.log('user disconnected');
+  });
+
+  socket.on('changeduework', function(msg) {
+    console.log("Change DueWork: " + msg)
+    changeDuework(msg[1], msg[2]);
+    
+  })
+});
 
 //Routers
 var webRouter = require('./routers/webRouter');

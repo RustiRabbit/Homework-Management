@@ -47,7 +47,8 @@
                 <script>
                     function tickDuework(id, cb) {
                         console.log("Checkbox ID: " + id + ". Checkbox Value: " + cb.checked);
-
+                        console.log(cb.checked);
+                        socket.emit('changeduework', [id, cb.checked, <%= userid %>])
                     }
                 </script>
             </tr>
@@ -55,5 +56,10 @@
         </table>
 
         <a href="/app/duework/create">Create a new DueWork</a>
+
+        <script>
+            var socket = io();
+        </script>
+
     </body>
 </html>
