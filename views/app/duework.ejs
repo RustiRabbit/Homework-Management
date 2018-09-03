@@ -43,6 +43,14 @@
                 var time = moment('<%= data[i].duedate %>').format("DD dddd, MMMM, YYYY");
                 document.getElementById('<%= i %>').innerHTML = time;
                 </script>
+                <!-- The Modal -->
+                <div id="myModal<%= data[i].id %>" class="modal">
+                <!-- Modal content -->
+                    <div class="modal-content">
+                        <span class="close">&times;</span>
+                        <p>Some text in the Modal..</p>
+                    </div>
+                </div>
             </tr>
             <% } %>
         </table>

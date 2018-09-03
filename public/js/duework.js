@@ -21,5 +21,8 @@ function removeDueWork(id, row) {
 }
 
 function changeDueWork(id, subjectid, label, duedate) {
+    var modal = document.getElementById('myModal' + id);
+    modal.style.display = "block";
     console.log("Change DueWork. ID: " + id + ". SubjectID: " + subjectid + ". Label: " + label + ". DueDate: " + duedate);
 }
+
