@@ -20,13 +20,12 @@
         <h1 class="maintitle" >Duework</h1>
         <table style="border: 1px solid black; border-collapse: collapse; width:100%">
             <tr>
-                <th>Tick</th>
+                <th>Complete</th>
                 <th>Duework ID</th>
                 <th>Subject ID</th>
                 <th>User ID</th>
                 <th>Duework Label</th>
                 <th>Due Date</th>
-                <th>Complete</th>
             </tr>
             <% for(var i = 0; i < data.length; i++) { %> 
             <tr>
@@ -39,7 +38,6 @@
                 <td><%= data[i].userid %></td>
                 <td><%= data[i].worklabel %></td>
                 <td id='<%= i %>'></td>
-                <td><%= data[i].complete %></td>
                 <script>
                 var time = moment('<%= data[i].duedate %>').format("DD dddd, MMMM, YYYY");
                 document.getElementById('<%= i %>').innerHTML = time;
