@@ -28,7 +28,6 @@ router.get('/duework/change', function(req, res) {
             console.log("ERROR: " + err);
         } else {
             console.log("Updated Record");
-            res.send("Update Record. ID: " + req.query.id);
         }
     });
 });
@@ -45,7 +44,6 @@ router.get('/duework/remove', function(req, res) {
             console.log("ERROR: " + err);
         } else {
             console.log("Removed Record");
-            res.send("Remove Record. ID: " + req.query.id);
         }
     });
 });

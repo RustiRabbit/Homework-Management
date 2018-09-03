@@ -32,7 +32,7 @@
                 <script>
                 document.getElementById('<%= i %>check').checked = <%= data[i].complete %>;
                 </script>
-                <td><%= subjectdata[data[i].id].subjectname %></td>
+                <td><%= subjectdata[data[i].subjectid - 1].subjectname %></td>
                 <td><%= data[i].worklabel %></td>
                 <td id='<%= i %>'></td>
                 <td><a href="#" onclick="removeDueWork(<%= data[i].id %>, this)">Delete</a></td>
@@ -48,7 +48,6 @@
                         xmlhttp.open("GET","/ajax/duework/change?id=" + id + "&value=" + cb.checked, true);
                         xmlhttp.send();
                      
-                        console.log(xmlhttp.responseText);
                     }
 
                     function removeDueWork(id, row) {
@@ -58,8 +57,6 @@
 
                         xmlhttp.open("GET","/ajax/duework/remove?id=" + id, true);
                         xmlhttp.send();
-                     
-                        console.log(xmlhttp.responseText);
 
                         //Delete Row
                         var i = row.parentNode.parentNode.rowIndex;
