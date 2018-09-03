@@ -10,6 +10,7 @@
         <!--Javascript-->
         <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
         <script src="/static/js/moment.js"></script>
+        <script src="/static/js/duework.js"></script>
     </head>
     <script>
     
@@ -41,29 +42,6 @@
                 <script>
                 var time = moment('<%= data[i].duedate %>').format("DD dddd, MMMM, YYYY");
                 document.getElementById('<%= i %>').innerHTML = time;
-                </script>
-                <script>
-                    function tickDuework(id, cb) {
-                        console.log("Checkbox ID: " + id + ". Checkbox Value: " + cb.checked);
-                        xmlhttp = new XMLHttpRequest();
-
-                        xmlhttp.open("GET","/ajax/duework/change?id=" + id + "&value=" + cb.checked, true);
-                        xmlhttp.send();
-                     
-                    }
-
-                    function removeDueWork(id, row) {
-                        console.log("Remove DueWork: " + id);
-
-                        xmlhttp = new XMLHttpRequest();
-
-                        xmlhttp.open("GET","/ajax/duework/remove?id=" + id, true);
-                        xmlhttp.send();
-
-                        //Delete Row
-                        var i = row.parentNode.parentNode.rowIndex;
-                        document.getElementById("dueworkTable").deleteRow(i);
-                    }
                 </script>
             </tr>
             <% } %>
