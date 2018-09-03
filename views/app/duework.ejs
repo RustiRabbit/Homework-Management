@@ -25,6 +25,7 @@
                 <th>Duework Label</th>
                 <th>Due Date</th>
                 <th>Delete</th>
+                <th>Edit</th>
             </tr>
             <% for(var i = 0; i < data.length; i++) { %> 
             <tr>
@@ -36,6 +37,7 @@
                 <td><%= data[i].worklabel %></td>
                 <td id='<%= i %>'></td>
                 <td><a href="#" onclick="removeDueWork(<%= data[i].id %>, this)">Delete</a></td>
+                <td><a href="#">Edit</a></td>
                 <script>
                 var time = moment('<%= data[i].duedate %>').format("DD dddd, MMMM, YYYY");
                 document.getElementById('<%= i %>').innerHTML = time;
