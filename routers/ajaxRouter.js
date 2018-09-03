@@ -23,11 +23,29 @@ router.get('/duework/change', function(req, res) {
         ssl: datauseSSL,
       });
     client.connect();
-    client.query("UPDATE duework SET complete=$1 WHERE id=$2", [req.query.value, req.query.id], function(err, res) {
+    client.query("UPDATE duework SET complete=$1 WHERE id=$2", [req.query.value, req.query.id], function(err, responce) {
         if(err) {
             console.log("ERROR: " + err);
         } else {
             console.log("Updated Record");
+            res.send("Update Record. ID: " + req.query.id);
+        }
+    });
+});
+
+router.get('/duework/remove', function(req, res) {
+    console.log("Duework ID: " + req.query.id);
+    const client = new Client({
+        connectionString: process.env.DATAURI,
+        ssl: datauseSSL,
+      });
+    client.connect();
+    client.query("DELETE FROM duework WHERE id=$1", [req.query.id], function(err, responce) {
+        if(err) {
+            console.log("ERROR: " + err);
+        } else {
+            console.log("Removed Record");
+            res.send("Remove Record. ID: " + req.query.id);
         }
     });
 });

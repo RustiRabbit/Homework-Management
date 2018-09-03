@@ -18,14 +18,13 @@
         <%- include header.ejs %>
         <p><strong><%- message %></strong></p>
         <h1 class="maintitle" >Duework</h1>
-        <table style="border: 1px solid black; border-collapse: collapse; width:100%">
+        <table style="border: 1px solid black; border-collapse: collapse; width:100%" id="dueworkTable">
             <tr>
                 <th>Complete</th>
-                <th>Duework ID</th>
-                <th>Subject ID</th>
-                <th>User ID</th>
+                <th>Subject Name</th>
                 <th>Duework Label</th>
                 <th>Due Date</th>
+                <th>Delete</th>
             </tr>
             <% for(var i = 0; i < data.length; i++) { %> 
             <tr>
@@ -33,11 +32,10 @@
                 <script>
                 document.getElementById('<%= i %>check').checked = <%= data[i].complete %>;
                 </script>
-                <td><%= data[i].id %></td>
-                <td><%= data[i].subjectid %></td>
-                <td><%= data[i].userid %></td>
+                <td><%= subjectdata[data[i].id].subjectname %></td>
                 <td><%= data[i].worklabel %></td>
                 <td id='<%= i %>'></td>
+                <td><a href="#" onclick="removeDueWork(<%= data[i].id %>, this)">Delete</a></td>
                 <script>
                 var time = moment('<%= data[i].duedate %>').format("DD dddd, MMMM, YYYY");
                 document.getElementById('<%= i %>').innerHTML = time;
@@ -51,6 +49,21 @@
                         xmlhttp.send();
                      
                         console.log(xmlhttp.responseText);
+                    }
+
+                    function removeDueWork(id, row) {
+                        console.log("Remove DueWork: " + id);
+
+                        xmlhttp = new XMLHttpRequest();
+
+                        xmlhttp.open("GET","/ajax/duework/remove?id=" + id, true);
+                        xmlhttp.send();
+                     
+                        console.log(xmlhttp.responseText);
+
+                        //Delete Row
+                        var i = row.parentNode.parentNode.rowIndex;
+                        document.getElementById("dueworkTable").deleteRow(i);
                     }
                 </script>
             </tr>
