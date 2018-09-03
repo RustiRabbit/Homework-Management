@@ -62,14 +62,24 @@ router.post('/signup', function(req, res, next){
   
 //Serve Duework Page
 router.get('/duework', isLoggedIn, function(req, res){
+    console.log("GET DUEWORK")
     var message = req.query.message;
     client.query("SELECT id, subjectid, userid, worklabel, duedate, complete FROM duework WHERE userid=$1 ORDER BY duedate ASC", [req.user.id], (err, responce) => {
         if (err) {
             res.send(err);
         } else {
-            console.log(responce.rows);
-            res.render('app/duework', {data: responce.rows,
-                                        message: message});
+            client.query("SELECT * FROM subjects WHERE userid=$1", [req.user.id], function(err, subjectresponce) {
+                if(err) {
+                    res.send(err)
+                } else {
+                    console.log(subjectresponce.rows);
+                    res.render('app/duework', {data: responce.rows,
+                                               message: message,
+                                               userid: req.user.id,
+                                               subjectdata: subjectresponce.rows});
+                }     
+            })
+
         }
     })
 });

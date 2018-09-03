@@ -68,7 +68,7 @@ passport.use(new Strategy((username, password, cb) => {
 passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: process.env.GOOGLE_REDIRECT_URL,
+    callbackURL: process.env.GOOGLE_REDIRECT_URL
   }, function(accessToken, refreshToken, profile, done) {
     console.log("Google ID: " + profile.id);
     console.log("First Name: " + profile.name.givenName);
@@ -124,10 +124,10 @@ app.use(function(req, res, next){
   next();
 })
 
-
 //Routers
 var webRouter = require('./routers/webRouter');
 var appRouter = require('./routers/appRouter');
+var ajaxRouter = require('./routers/ajaxRouter');
 
 //Static Files
 app.use('/static', express.static(path.join(__dirname, 'public')))
@@ -135,6 +135,7 @@ app.use('/static', express.static(path.join(__dirname, 'public')))
 //Use Router
 app.use('/', webRouter)
 app.use('/app', appRouter)
+app.use('/ajax', ajaxRouter)
 
 //The 404 Route
 app.get('/*', function(req, res){
