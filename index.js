@@ -124,21 +124,6 @@ app.use(function(req, res, next){
   next();
 })
 
-//Socket.io
-io.on('connection', function(socket){
-  console.log('a user connected');
-  
-  socket.on('disconnect', function(){
-    console.log('user disconnected');
-  });
-
-  socket.on('changeduework', function(msg) {
-    console.log("Change DueWork: " + msg)
-    changeDuework(msg[1], msg[2]);
-    
-  })
-});
-
 //Routers
 var webRouter = require('./routers/webRouter');
 var appRouter = require('./routers/appRouter');
