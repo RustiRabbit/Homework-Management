@@ -19,3 +19,7 @@ function removeDueWork(id, row) {
     var i = row.parentNode.parentNode.rowIndex;
     document.getElementById("dueworkTable").deleteRow(i);
 }
+
+function changeDueWork(id, subjectid, label, duedate) {
+    console.log("Change DueWork. ID: " + id + ". SubjectID: " + subjectid + ". Label: " + label + ". DueDate: " + duedate);
+}

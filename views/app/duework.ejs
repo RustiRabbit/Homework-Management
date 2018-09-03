@@ -38,7 +38,7 @@
                 <td><%= data[i].worklabel %></td>
                 <td id='<%= i %>'></td>
                 <td><a href="#" onclick="removeDueWork(<%= data[i].id %>, this)">Delete</a></td>
-                <td><a href="#">Edit</a></td>
+                <td><a href="#" onclick="changeDueWork(<%= data[i].id %>, 2, 'Test label', '12-12-2018')">Edit</a></td>
                 <script>
                 var time = moment('<%= data[i].duedate %>').format("DD dddd, MMMM, YYYY");
                 document.getElementById('<%= i %>').innerHTML = time;
