@@ -127,6 +127,7 @@ app.use(function(req, res, next){
 //Routers
 var webRouter = require('./routers/webRouter');
 var appRouter = require('./routers/appRouter');
+var ajaxRouter = require('./routers/ajaxRouter');
 
 //Static Files
 app.use('/static', express.static(path.join(__dirname, 'public')))
@@ -134,6 +135,7 @@ app.use('/static', express.static(path.join(__dirname, 'public')))
 //Use Router
 app.use('/', webRouter)
 app.use('/app', appRouter)
+app.use('/ajax', ajaxRouter)
 
 //The 404 Route
 app.get('*', function(req, res){
