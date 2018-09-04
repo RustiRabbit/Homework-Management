@@ -72,6 +72,7 @@ router.get('/duework', isLoggedIn, function(req, res){
                 if(err) {
                     res.send(err)
                 } else {
+                    console.log(responce.rows)
                     console.log(subjectresponce.rows);
                     res.render('app/duework', {data: responce.rows,
                                                message: message,

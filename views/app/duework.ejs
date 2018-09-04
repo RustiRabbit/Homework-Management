@@ -22,6 +22,7 @@
         <table style="border: 1px solid black; border-collapse: collapse; width:100%" id="dueworkTable">
             <tr>
                 <th>Complete</th>
+                <th>Data[i]</th>
                 <th>Subject Name</th>
                 <th>Duework Label</th>
                 <th>Due Date</th>
@@ -31,14 +32,22 @@
             <% for(var i = 0; i < data.length; i++) { %> 
             <tr>
                 <td><input type="checkbox" id="<%= i %>check" onchange="tickDuework(<%= data[i].id %>, this)"></td>
-                <script>
-                document.getElementById('<%= i %>check').checked = <%= data[i].complete %>;
-                </script>
-                <td><%= subjectdata[data[i].subjectid - 1].subjectname %></td>
+                <td><%= i %></td>
+                <% for(var v = 0; v < subjectdata.length; i++) {%>
+                    <% if (subjectdata[v].id == data[i].subjectid) {%>
+                        <td><%= subjectdata[v].subjectname %></td>
+                    <% } %>
+                <% } %>
                 <td><%= data[i].worklabel %></td>
                 <td id='<%= i %>'></td>
                 <td><a href="#" onclick="removeDueWork(<%= data[i].id %>, this)">Delete</a></td>
                 <td><a href="#" onclick="changeDueWork(<%= data[i].id %>, 2, 'Test label', '12-12-2018')">Edit</a></td>
+                <td><%= data[i].subjectid %></td>
+                <script>
+                var time = moment('<%= data[i].duedate %>').format("DD dddd, MMMM, YYYY");
+                document.getElementById('<%= i %>').innerHTML = time;
+                document.getElementById('<%= i %>check').checked = <%= data[i].complete %>;
+                </script>
                 <!-- The Modal -->
                 <div id="myModal<%= data[i].id %>" class="modal">
                 <!-- Modal content -->
