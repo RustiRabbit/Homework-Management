@@ -26,3 +26,7 @@ function changeDueWork(id, subjectid, label, duedate) {
     console.log("Change DueWork. ID: " + id + ". SubjectID: " + subjectid + ". Label: " + label + ". DueDate: " + duedate);
 }
 
+function closeModal(id) {
+    var modal = document.getElementById('myModal' + id);
+    modal.style.display = "none";
+}
