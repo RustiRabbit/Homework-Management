@@ -10,6 +10,7 @@
         <!--Javascript-->
         <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
         <script src="/static/js/moment.js"></script>
+        <script src="/static/js/duework.js"></script>
     </head>
     <script>
     
@@ -25,6 +26,7 @@
                 <th>Duework Label</th>
                 <th>Due Date</th>
                 <th>Delete</th>
+                <th>Edit</th>
             </tr>
             <% for(var i = 0; i < data.length; i++) { %> 
             <tr>
@@ -36,32 +38,21 @@
                 <td><%= data[i].worklabel %></td>
                 <td id='<%= i %>'></td>
                 <td><a href="#" onclick="removeDueWork(<%= data[i].id %>, this)">Delete</a></td>
+                <td><a href="#" onclick="changeDueWork(<%= data[i].id %>, 2, 'Test label', '12-12-2018')">Edit</a></td>
+                <!-- The Modal -->
+                <div id="myModal<%= data[i].id %>" class="modal">
+                <!-- Modal content -->
+                    <div class="modal-content">
+                        <span class="close" onclick="closeModal(<%= data[i].id %>)">&times;</span>
+                        <h4>Edit - <%= data[i].worklabel %></h4>
+                        <p>Subject Name: <%= subjectdata[data[i].subjectid - 1].subjectname %></p>
+                        <p id="<%= i %>modaltime">Due Date: ERROR</p>
+                    </div>
+                </div>
                 <script>
                 var time = moment('<%= data[i].duedate %>').format("DD dddd, MMMM, YYYY");
                 document.getElementById('<%= i %>').innerHTML = time;
-                </script>
-                <script>
-                    function tickDuework(id, cb) {
-                        console.log("Checkbox ID: " + id + ". Checkbox Value: " + cb.checked);
-                        xmlhttp = new XMLHttpRequest();
-
-                        xmlhttp.open("GET","/ajax/duework/change?id=" + id + "&value=" + cb.checked, true);
-                        xmlhttp.send();
-                     
-                    }
-
-                    function removeDueWork(id, row) {
-                        console.log("Remove DueWork: " + id);
-
-                        xmlhttp = new XMLHttpRequest();
-
-                        xmlhttp.open("GET","/ajax/duework/remove?id=" + id, true);
-                        xmlhttp.send();
-
-                        //Delete Row
-                        var i = row.parentNode.parentNode.rowIndex;
-                        document.getElementById("dueworkTable").deleteRow(i);
-                    }
+                document.getElementById('<%= i %>modaltime').innerHTML = "Due Date: " + time;
                 </script>
             </tr>
             <% } %>
