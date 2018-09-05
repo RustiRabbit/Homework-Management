@@ -74,6 +74,7 @@ router.get('/duework', isLoggedIn, function(req, res){
                 } else {
                     console.log(responce.rows)
                     console.log(subjectresponce.rows);
+                    console.log(responce.rows[0])
                     res.render('app/duework', {data: responce.rows,
                                                message: message,
                                                userid: req.user.id,
