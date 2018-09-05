@@ -39,16 +39,16 @@ th {
 }
 
 /* The Close Button */
-.close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
+.save {
+    background-color: white;
+    color: black;
+    border: 2px solid #4CAF50; /* Green */
+    webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
 }
 
-.close:hover,
-.close:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
+.save:hover,
+.save:focus {
+    background-color: #4CAF50; /* Green */
+    color: white;
 }
