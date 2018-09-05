@@ -155,7 +155,9 @@ function ServerClose(serverclose) {
   }
 }
 
-server.on('close', function() {ServerClose(true);})
+server.on('close', function() {
+  ServerClose(true);
+})
 
 //Fixes Ctrl+C
 process.on('SIGINT', function() {
