@@ -45,6 +45,10 @@ router.get('/duework/remove', function(req, res) {
     });
 });
 
+router.get('/duework/edit', function(req, res) {
+    console.log("Edit Duework: ID: " + req.query.id + ". New Label: " + req.query.label + ". Duework: " + req.query.duedate);
+});
+
 //Subjects
 router.get('/subjects/remove', function(req, res) {
     client.query("DELETE FROM subjects WHERE id=$1", [req.query.id], function(err, responce) {

@@ -10,9 +10,9 @@
 
         <!--Javascript-->
         <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+        <script src="/static/js/pikeadate.js"></script>
         <script src="/static/js/moment.js"></script>
         <script src="/static/js/duework.js"></script>
-        <script src="/static/js/pikeadate.js"></script>
     </head>
     <script>
     
@@ -62,9 +62,10 @@
                             <% } %>
                         <% } %>
                         
-                        <p>Due Date: </p> <input type="text" id="datepicker" value="30 Aug 2018" name="duedate" ><br>
+                        <p>Due Date: </p> <input type="text" id="datepicker<%= i %>" value="30 Aug 2018" name="duedate" required><br>
+                        <p>Label: </p> <input type="text" id="newLabel<%= i %>" required>
                         <p><strong>This dosen't work</strong></p>
-                        <button class="save">Save</button>
+                        <button class="save" onclick="changeDueWork(<%= data[i].id %>, 'newLabel<%= i %>', 'datepicker<%= i %>')">Save</button>
                     </div>
                 </div>
                 <script>
@@ -72,7 +73,7 @@
                 document.getElementById('<%= i %>').innerHTML = time;
 
                 var picker = new Pikaday({
-                    field: document.getElementById('datepicker'),
+                    field: document.getElementById('datepicker<%= i %>'),
                     onSelect: function() {
                         //var date = document.createTextNode(this.getMoment().format('Do MMMM YYYY') + ' ');
                         //document.getElementById('selected').appendChild(date);
