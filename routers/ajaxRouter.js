@@ -22,6 +22,7 @@ router.get('/test', function(req, res) {
     res.send('This is a test');
 });
 
+//Duework
 router.get('/duework/change', function(req, res) {
     console.log("Duework ID: " + req.query.id + ". Value: " + req.query.value);
     client.query("UPDATE duework SET complete=$1 WHERE id=$2", [req.query.value, req.query.id], function(err, responce) {
@@ -40,6 +41,17 @@ router.get('/duework/remove', function(req, res) {
             console.log("ERROR: " + err);
         } else {
             console.log("Removed Record");
+        }
+    });
+});
+
+//Subjects
+router.get('/subjects/remove', function(req, res) {
+    client.query("DELETE FROM subjects WHERE id=$1", [req.query.id], function(err, responce) {
+        if(err) {
+            console.log("ERROR: " + err);
+        } else {
+            console.log("Updated Record");
         }
     });
 });

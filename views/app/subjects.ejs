@@ -9,25 +9,31 @@
 
         <!--Javascript-->
         <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+        <script src="/static/js/subjects.js"></script>
     </head>
     <body>
         <%- include header.ejs %>
         <p><strong><%- message %></strong></p>
         <h1 class="maintitle" >Subjects</h1>
-        <table style="border: 1px solid black; border-collapse: collapse; width:100%    ">
+        <table style="border: 1px solid black; border-collapse: collapse; width:100%" id="subjectTable">
             <tr>
                 <th>Subject ID</th>
                 <th>User ID</th>
                 <th>Subject Name</th>
+                <th>Delete</th>
+                <th>Edit</th>
             </tr>
             <% for(var i = 0; i < data.length; i++) { %> 
             <tr>
                 <td><%= data[i].id %></td>
                 <td><%= data[i].userid %></td>
                 <td><%= data[i].subjectname %></td>
+                <td><a href="#" onclick="removeSubject(<%= data[i].id %>, this)">Delete</a></td>
+                <td><a href="#">Edit</a></td>
             </tr>
             <% } %>
         </table>
         <a href="/app/subjects/create">Create a new Subject</a>
+        <% include footer.ejs %>
     </body>
 </html>
