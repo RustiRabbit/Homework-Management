@@ -56,11 +56,11 @@
                         <h4>Edit - <%= data[i].worklabel %></h4>
                         <% for(var v = 0; v < subjectdata.length; v++) {%>
                             <% if (data[i].subjectid == subjectdata[v].id) {%>
-                                <p>Subject Name: <%=  subjectdata[v].subjectname %></p>
-                            <% } %>
+                                <p>Subject Name: <%=  subjectdata[v].subjectname %></p>                            <% } %>
                         <% } %>
                         
                         <p id="<%= i %>modaltime">Due Date: ERROR</p>
+                        <p><strong>This dosen't work</strong></p>
                         <button class="save">Save</button>
                     </div>
                 </div>
