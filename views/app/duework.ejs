@@ -61,16 +61,19 @@
                                 <p>Subject Name: <%=  subjectdata[v].subjectname %></p>                            
                             <% } %>
                         <% } %>
-                        <p>Due Date: </p> <input type="text" id="datepicker<%= data[i].id %>" value="30 Aug 2018" name="duedate" ><br>
+                        <p>Label: </p> <input type="text" id="newLabel<%= data[i].id %>"><br>
+                        <p>Due Date: </p> <input type="text" id="datepicker<%= data[i].id %>" value="30 Aug 2018"><br>
                         <p><strong>This dosen't work</strong></p>
-                        <button class="save" onclick="changeDueWork(<%= data[i].id %>, 'newLabel<%= i %>', 'datepicker<%= i %>')">Save</button>
+                        <button class="save" onclick="changeDueWork(<%= data[i].id %>, $('#newLabel<%= data[i].id %>')[0].value, $('#datepicker<%= data[i].id %>')[0].value)">Save</button>
                     </div>
                 </div>
                 <script>
                 var time = moment('<%= data[i].duedate %>').format("DD dddd, MMMM, YYYY");
                 document.getElementById('<%= i %>').innerHTML = time;
 
-                flatpickr("#datepicker<%= data[i].id %>", {});
+                flatpickr("#datepicker<%= data[i].id %>", {
+                    defaultDate: 'today'
+                });
                 </script>
 
             </tr>
