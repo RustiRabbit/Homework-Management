@@ -3,7 +3,7 @@
         <title>Homework</title>
         
         <!--CSS-->
-        <link rel="stylesheet" href="/static/css/pikeadate.css" type="text/css"/>
+        <link rel="stylesheet" href="/static/css/flatpickr.min.css" type="text/css"/>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
         <link rel="stylesheet" href="/static/css/navigation.css">
         <link rel="stylesheet" href="/static/css/main.css">
@@ -12,7 +12,7 @@
         <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
         <script src="/static/js/moment.js"></script>
         <script src="/static/js/duework.js"></script>
-        <script src="/static/js/pikeadate.js"></script>
+        <script src="/static/js/flatpickr.js"></script>
     </head>
     <script>
     
@@ -61,8 +61,7 @@
                                 <p>Subject Name: <%=  subjectdata[v].subjectname %></p>                            
                             <% } %>
                         <% } %>
-                        
-                        <p>Due Date: </p> <input type="text" id="datepicker" value="30 Aug 2018" name="duedate" ><br>
+                        <p>Due Date: </p> <input type="text" id="datepicker<%= data[i].id %>" value="30 Aug 2018" name="duedate" ><br>
                         <p><strong>This dosen't work</strong></p>
                         <button class="save">Save</button>
                     </div>
@@ -71,14 +70,7 @@
                 var time = moment('<%= data[i].duedate %>').format("DD dddd, MMMM, YYYY");
                 document.getElementById('<%= i %>').innerHTML = time;
 
-                var picker = new Pikaday({
-                    field: document.getElementById('datepicker'),
-                    onSelect: function() {
-                        //var date = document.createTextNode(this.getMoment().format('Do MMMM YYYY') + ' ');
-                        //document.getElementById('selected').appendChild(date);
-                    }
-                });
-                picker.setMoment(moment().dayOfYear(366));
+                flatpickr("#datepicker<%= data[i].id %>", {});
                 </script>
 
             </tr>
