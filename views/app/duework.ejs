@@ -10,7 +10,6 @@
 
         <!--Javascript-->
         <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-        <script src="/static/js/pikeadate.js"></script>
         <script src="/static/js/moment.js"></script>
         <script src="/static/js/duework.js"></script>
         <script src="/static/js/flatpickr.js"></script>
@@ -45,7 +44,7 @@
                 <td><%= data[i].worklabel %></td>
                 <td id='<%= i %>'></td>
                 <td><a href="#" onclick="removeDueWork(<%= data[i].id %>, this)">Delete</a></td>
-                <td><a href="#" onclick="changeDueWork(<%= data[i].id %>, 2, 'Test label', '12-12-2018')">Edit</a></td>
+                <td><a href="#" onclick="ShowDueWork(<%= data[i].id %>)">Edit</a></td>
                 <script>
                 var time = moment('<%= data[i].duedate %>').format("DD dddd, MMMM, YYYY");
                 document.getElementById('<%= i %>').innerHTML = time;
