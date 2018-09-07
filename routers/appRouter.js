@@ -115,7 +115,7 @@ router.post('/duework/create', function(req, res, next){
             res.send(err);
         } else {
             console.log("Added a new DueWork")
-            res.redirect('/app/duework?message=Added%20A%20New%Duework');
+            res.redirect('/app/duework?message=Added%20A%20New%20Duework');
         }
     })
 });

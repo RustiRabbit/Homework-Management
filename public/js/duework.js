@@ -15,15 +15,15 @@ function removeDueWork(id, row) {
     xmlhttp.open("GET","/ajax/duework/remove?id=" + id, true);
     xmlhttp.send();
 
-    //Delete Row
+    //Delete Row    
     var i = row.parentNode.parentNode.rowIndex;
     document.getElementById("dueworkTable").deleteRow(i);
 }
 
-function changeDueWork(id, subjectid, label, duedate) {
+function changeDueWork(id, label, duedate) {
     var modal = document.getElementById('myModal' + id);
-    modal.style.display = "block";
-    console.log("Change DueWork. ID: " + id + ". SubjectID: " + subjectid + ". Label: " + label + ". DueDate: " + duedate);
+    modal.style.display = "";
+    console.log("Change DueWork. ID: " + id + ". Label: " + $(label).value + ". DueDate: " + $(duedate).value);
 }
 
 function closeModal(id) {
