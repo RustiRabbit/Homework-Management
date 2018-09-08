@@ -64,7 +64,7 @@
                         <p>Label: </p> <input type="text" id="newLabel<%= data[i].id %>"><br>
                         <p>Due Date: </p> <input type="text" id="datepicker<%= data[i].id %>" value="30 Aug 2018"><br>
                         <p><strong>This dosen't work</strong></p>
-                        <button class="save" onclick="changeDueWork(<%= data[i].id %>, $('#newLabel<%= data[i].id %>')[0].value, $('#datepicker<%= data[i].id %>')[0].value)">Save</button>
+                        <button class="save" onclick="changeDueWork(<%= data[i].id %>, $('#newLabel<%= data[i].id %>')[0].value, $('#datepicker<%= data[i].id %>')[0].value, this)">Save</button>
                     </div>
                 </div>
                 <script>

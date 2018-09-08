@@ -47,6 +47,14 @@ router.get('/duework/remove', function(req, res) {
 
 router.get('/duework/edit', function(req, res) {
     console.log("Edit Duework: ID: " + req.query.id + ". New Label: " + req.query.label + ". Duework: " + req.query.duedate);
+    client.query("UPDATE duework SET worklabel=$1, duedate=$2 WHERE id=$3", [req.query.label, req.query.duedate, req.query.id], function(err, responce) {
+        if (err) {
+            console.log(err)
+        } else {
+            console.log("Updated Record")
+            res.status(200).send("It worked")
+        }
+    });
 });
 
 //Subjects
