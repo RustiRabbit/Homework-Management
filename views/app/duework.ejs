@@ -61,18 +61,24 @@
                                 <p>Subject Name: <%=  subjectdata[v].subjectname %></p>                            
                             <% } %>
                         <% } %>
-                        <p>Label: </p> <input type="text" id="newLabel<%= data[i].id %>"><br>
-                        <p>Due Date: </p> <input type="text" id="datepicker<%= data[i].id %>" value="30 Aug 2018"><br>
+                        <p>Label: </p> <input type="text" id="newLabel<%= data[i].id %>" value="<%= data[i].worklabel %>"><br>
+                        <p>Due Date: </p> <input type="text" id="datepicker<%= data[i].id %>"><br>
                         <p><strong>This dosen't work</strong></p>
                         <button class="save" onclick="changeDueWork(<%= data[i].id %>, $('#newLabel<%= data[i].id %>')[0].value, $('#datepicker<%= data[i].id %>')[0].value, this)">Save</button>
                     </div>
                 </div>
                 <script>
                 var time = moment('<%= data[i].duedate %>').format("DD dddd, MMMM, YYYY");
+                var datepickertime = moment('<%= data[i].duedate %>').format("DD/MM/YY")
                 document.getElementById('<%= i %>').innerHTML = time;
 
                 flatpickr("#datepicker<%= data[i].id %>", {
-                    defaultDate: 'today'
+                    dateFormat: "m/d/Y",
+                    defaultDate: datepickertime,
+                    onChange : function() {
+                        var duedate = $("#datepicker<%= data[i].id %>")
+                        duedate.innerHTML = moment(duedate.value).format("DD/MM/YYYY"); 
+                    }
                 });
                 </script>
 

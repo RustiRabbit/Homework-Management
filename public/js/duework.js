@@ -34,7 +34,7 @@ function changeDueWork(id, label, duedate, row) {
         }
     };
 
-    xmlhttp.open("GET", "/ajax/duework/edit?id=" + encodeURIComponent(id) + "&label=" + encodeURIComponent(label) + "&duedate=" + encodeURIComponent(duedate), true);
+    xmlhttp.open("GET", "/ajax/duework/edit?id=" + encodeURIComponent(id) + "&label=" + encodeURIComponent(label) + "&duedate=" + encodeURIComponent(moment(duedate).format("MM/DD/YY")), true);
     xmlhttp.send();
 
     
