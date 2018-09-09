@@ -159,28 +159,33 @@ router.post('/subjects/create', function(req, res, next){
 //Serve Login Page
 router.get('/login', function(req, res){
     var message = req.query.error;
-    res.render('app/login', {infomation: message});
+    if(req.user != null) {
+        res.redirect('/app')
+    } else {
+        res.render('app/login', {infomation: message});
+    }
  });
 
 //Login
 router.post('/login', function (req, res, next) {
-    passport.authenticate('local', function (err, user, info) {
-        if (err) {
-            res.status(200).send("ERROR 200. " + res);
-        } else if (info) {
-            res.status(401).send("401 Unauthorized")
-        } else if (!user) {
-            res.redirect('/app/login?error=You%20have%20the%20wrong%20username%20or%20password')
-        } else {
-            req.login(user, function(err) {
-                if (err) {
-                    res.status(500).send("REQ.LOGIN ERROR. Try to login again.");
-                } else {
-                    res.redirect('/app')
-                }
-            })
-        }
-    })(req, res, next);
+        passport.authenticate('local', function (err, user, info) {
+            if (err) {
+                res.status(200).send("ERROR 200. " + res);
+            } else if (info) {
+                res.status(401).send("401 Unauthorized")
+            } else if (!user) {
+                res.redirect('/app/login?error=You%20have%20the%20wrong%20username%20or%20password')
+            } else {
+                req.login(user, function(err) {
+                    if (err) {
+                        res.status(500).send("REQ.LOGIN ERROR. Try to login again.");
+                    } else {
+                        res.redirect('/app')
+                    }
+                })
+            }
+        })(req, res, next);
+
 });
 
 //Serve Login Page
