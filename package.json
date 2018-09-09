@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "test" : "mocha --timeout 10000"
   },
   "repository": {
     "type": "git",
@@ -19,6 +20,7 @@
   "dependencies": {
     "bcrypt": "^3.0.0",
     "body-parser": "^1.18.3",
+    "chai": "^4.1.2",
     "connect-ensure-login": "^0.1.1",
     "cookie-parser": "^1.4.3",
     "dotenv": "^6.0.0",
@@ -29,6 +31,8 @@
     "passport": "^0.4.0",
     "passport-google-oauth": "^1.0.0",
     "passport-local": "^1.0.0",
-    "pg": "^7.4.3"
+    "pg": "^7.4.3",
+    "chai-http": "^2.0.1",
+    "mocha": "^2.4.5"
   }
 }

@@ -139,7 +139,7 @@ app.use('/ajax', ajaxRouter)
 
 //The 404 Route
 app.get('/*', function(req, res){
-  res.render('404')
+  res.status(404).render('404')
 });
 
 //Server Close Functions (Everything should lead to this)
@@ -169,3 +169,5 @@ server.listen(PORT, function(){
   console.log("Starting Server");
   console.log(`Listening on *:${PORT}`);
 });   
+
+module.exports = app; // for testing
