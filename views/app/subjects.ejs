@@ -29,7 +29,17 @@
                 <td><%= data[i].userid %></td>
                 <td><%= data[i].subjectname %></td>
                 <td><a href="#" onclick="removeSubject(<%= data[i].id %>, this)">Delete</a></td>
-                <td><a href="#">Edit</a></td>
+                <td><a href="#" onclick="ShowSubject(<%= data[i].id %>)">Edit</a></td>
+                <!-- The Modal -->
+                <div id="myModal<%= data[i].id %>" class="modal">
+                <!-- Modal content -->
+                    <div class="modal-content">
+                        <span class="close" onclick="closeModal(<%= data[i].id %>)">&times;</span>
+                        <h4>Edit - <%= data[i].subjectname %></h4>
+                        <p>Name: </p> <input type="text" id="newName<%= data[i].id %>" value="<%= data[i].worklabel %>"><br>
+                        <button class="save">Save</button>
+                    </div>
+                </div>
             </tr>
             <% } %>
         </table>
