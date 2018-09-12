@@ -31,7 +31,7 @@
                 <th>Edit</th>
             </tr>
             <% for(var i = 0; i < data.length; i++) { %> 
-            <tr>
+            <tr class="tr<%= data[i].id %>">
 
                 <td><input type="checkbox" id="<%= i %>check" onchange="tickDuework(<%= data[i].id %>, this)"></td>
 
