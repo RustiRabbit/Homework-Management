@@ -37,7 +37,7 @@
                         <span class="close" onclick="closeModal(<%= data[i].id %>)">&times;</span>
                         <h4>Edit - <%= data[i].subjectname %></h4>
                         <p>Name: </p> <input type="text" id="newName<%= data[i].id %>" value="<%= data[i].worklabel %>"><br>
-                        <button class="save">Save</button>
+                        <button class="save" onclick="changeSubjects(<%= data[i].id %>, $('#newName<%= data[i].id %>')[0].value)">Save</button>
                     </div>
                 </div>
             </tr>

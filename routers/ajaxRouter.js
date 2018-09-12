@@ -80,6 +80,22 @@ router.get('/subjects/remove', function(req, res) {
 
 });
 
+router.get('/subjects/edit', function(req, res) {
+    if(req.query.subjectname && req.query.id != null) {
+        client.query("UPDATE subjects SET subjectname=$1 WHERE id=$2", [req.query.subjectname, req.query.id], function(err, responce) {
+            if (err) {
+                console.log(err)
+            } else {
+                console.log("Updated Record")
+                res.status(200).send("It worked")
+            }
+        });
+    } else {
+        res.status(200).send("Your running this like a test")
+    }
+
+});
+
 //Fixes Ctrl+C
 process.on('SIGINT', function() {
     client.end();
