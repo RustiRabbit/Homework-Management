@@ -31,7 +31,7 @@
                 <th>Edit</th>
             </tr>
             <% for(var i = 0; i < data.length; i++) { %> 
-            <tr class="tr<%= data[i].id %>">
+            <tr id="tr<%= data[i].id %>">
 
                 <td><input type="checkbox" id="<%= i %>check" onchange="tickDuework(<%= data[i].id %>, this)"></td>
 
@@ -45,11 +45,7 @@
                 <td id='<%= i %>'></td>
                 <td><a href="#" onclick="removeDueWork(<%= data[i].id %>, this)">Delete</a></td>
                 <td><a href="#" onclick="ShowDueWork(<%= data[i].id %>)">Edit</a></td>
-                <script>
-                var time = moment('<%= data[i].duedate %>').format("DD dddd, MMMM, YYYY");
-                document.getElementById('<%= i %>').innerHTML = time;
-                document.getElementById('<%= i %>check').checked = <%= data[i].complete %>;
-                </script>
+
                 <!-- The Modal -->
                 <div id="myModal<%= data[i].id %>" class="modal">
                 <!-- Modal content -->
@@ -80,6 +76,14 @@
                         duedate.innerHTML = moment(duedate.value).format("DD/MM/YYYY"); 
                     }
                 });
+
+                var time = moment('<%= data[i].duedate %>').format("DD dddd, MMMM, YYYY");
+                document.getElementById('<%= i %>').innerHTML = time;
+                document.getElementById('<%= i %>check').checked = <%= data[i].complete %>;
+
+                if (<%= data[i].complete %> == true) {
+                    document.getElementById('tr<%= data[i].id %>').setAttribute('class', 'trCompleted')
+                }
                 </script>
 
             </tr>
