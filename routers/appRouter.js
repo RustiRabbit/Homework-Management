@@ -35,7 +35,25 @@ router.use(bodyParser.json());
 
 //Serve Home Page
 router.get('/', isLoggedIn, function(req, res){
-    res.render('app/app', { user: req.user});
+    client.query("SELECT id, subjectid, userid, worklabel, duedate, complete FROM duework WHERE userid=$1 ORDER BY duedate ASC", [req.user.id], (err, responce) => {
+        if (err) {
+            res.send(err);
+        } else {
+            client.query("SELECT * FROM subjects WHERE userid=$1", [req.user.id], function(err, subjectresponce) {
+                if(err) {
+                    res.send(err)
+                } else {
+                    console.log(responce.rows)
+                    console.log(subjectresponce.rows);
+                    console.log(responce.rows[0])
+                    res.render('app/app', {data: responce.rows,
+                                               userid: req.user.id,
+                                               subjectdata: subjectresponce.rows});
+                }     
+            })
+
+        }
+    })
 });
 
 //Signup Page
