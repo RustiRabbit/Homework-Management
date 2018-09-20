@@ -23,7 +23,7 @@ function removeDueWork(id, row) {
 
     //Delete Row    
     var i = row.parentNode.parentNode.rowIndex;
-    document.getElementById("dueworkTable").deleteRow(i);
+    document.getElementsByClassName("infomationTable")[0].deleteRow(i);
 }
 
 function changeDueWork(id, label, duedate, row) {
