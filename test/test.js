@@ -115,7 +115,7 @@ describe('GET REQUESTS', () => {
 });
 
 describe('POST Requests', () => {
-    it('Login to App', () => {
+    it('Login to App', (done) => {
         let loginInfo = {
             username: "TestUser",
             password: "Test"
@@ -158,6 +158,14 @@ describe('AJAX Requests', () => {
       it('/ajax/subjects/remove', (done) => {
         chai.request(server)
             .get('/ajax/subjects/remove')
+            .end((err, res) => {
+                  res.should.have.status(200);
+              done();
+            });
+      });
+      it('/ajax/subjects/edit', (done) => {
+        chai.request(server)
+            .get('/ajax/subjects/edit')
             .end((err, res) => {
                   res.should.have.status(200);
               done();

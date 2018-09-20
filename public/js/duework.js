@@ -4,6 +4,12 @@ function tickDuework(id, cb) {
 
     xmlhttp.open("GET","/ajax/duework/change?id=" + id + "&value=" + cb.checked, true);
     xmlhttp.send();
+
+    if (cb.checked == true) {
+        cb.parentNode.parentNode.setAttribute('class', 'trCompleted');
+    } else {
+        cb.parentNode.parentNode.setAttribute('class', '');
+    }
  
 }
 
