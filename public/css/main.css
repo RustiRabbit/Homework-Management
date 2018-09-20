@@ -2,15 +2,8 @@
     text-align: center;
 }
 
-#subjectTable {
-    margin-left:auto; 
-    margin-right:auto;
-    border: 1px solid black; 
-    border-collapse: collapse;
-    width:80%;
-}
-
-#dashboard-title {
+.apptitle {
+    text-align: center;
     padding-right: 25%
 }
 
@@ -27,9 +20,7 @@
 }
 
 .createButton {
-    margin: 0 auto;
-    display:block;
-    text-align: center;
+    padding-left: 30%;
 }
 
 table, th, td {
@@ -92,4 +83,12 @@ th {
     width: 100%;
     color: black;
     text-align: center;
+ }
+
+ #starwars-logo {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    position:fixed;
+    bottom:0px;
  }
