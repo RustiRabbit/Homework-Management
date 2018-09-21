@@ -17,18 +17,14 @@
         <div class="page-content">
             <h1 class="apptitle" id="dashboard-title">Subjects</h1>
             <p><strong><%- message %></strong></p>
-            <table class="dueworkTable">
+            <table class="infomationTable">
                 <tr>
-                    <th>Subject ID</th>
-                    <th>User ID</th>
                     <th>Subject Name</th>
                     <th>Delete</th>
                     <th>Edit</th>
                 </tr>
                 <% for(var i = 0; i < data.length; i++) { %> 
                 <tr>
-                    <td><%= data[i].id %></td>
-                    <td><%= data[i].userid %></td>
                     <td><%= data[i].subjectname %></td>
                     <td><a href="#" onclick="removeSubject(<%= data[i].id %>, this)">Delete</a></td>
                     <td><a href="#" onclick="ShowSubject(<%= data[i].id %>)">Edit</a></td>

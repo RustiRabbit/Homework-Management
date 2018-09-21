@@ -19,33 +19,37 @@
 
         <div class="page-content">
             <h1 class="apptitle" id="dashboard-title"><strong>Welcome to Homework.School</strong></h1>
-                <table class="dueworkTable">
-                    <tr>
-                        <th>Complete</th>
-                        <th>Subject Name</th>
-                        <th>Duework Label</th>
-                        <th>Due Date</th>
-                    </tr>
-                    <% for(var i = 0; i < data.length; i++) { %> 
-                    <tr>
-                        <td><input type="checkbox" id="<%= i %>check" onchange="tickDuework(<%= data[i].id %>, this)"></td>
-                        <% for(var v = 0; v < subjectdata.length; v++) {%>
-                            <% if (data[i].subjectid == subjectdata[v].id) {%>
-                                <td><%= subjectdata[v].subjectname %></td>
+                <% if (data.length != 0) { %>
+                    <table class="infomationTable">
+                        <tr>
+                            <th>Complete</th>
+                            <th>Subject Name</th>
+                            <th>Duework Label</th>
+                            <th>Due Date</th>
+                        </tr>
+                        <% for(var i = 0; i < data.length; i++) { %> 
+                        <tr>
+                            <td><input type="checkbox" id="<%= i %>check" onchange="tickDuework(<%= data[i].id %>, this)"></td>
+                            <% for(var v = 0; v < subjectdata.length; v++) {%>
+                                <% if (data[i].subjectid == subjectdata[v].id) {%>
+                                    <td><%= subjectdata[v].subjectname %></td>
+                                <% } %>
                             <% } %>
-                        <% } %>
-                            
-                        <td><%= data[i].worklabel %></td>
-                        <td id='<%= i %>'></td>
+                                
+                            <td><%= data[i].worklabel %></td>
+                            <td id='<%= i %>'></td>
 
-                        <script>
-                            var time = moment('<%= data[i].duedate %>').format("DD dddd, MMMM, YYYY");
-                            var datepickertime = moment('<%= data[i].duedate %>').format("DD/MM/YY")
-                            document.getElementById('<%= i %>').innerHTML = time;
-                        </script>
-                    </tr>
-                <% } %>
-            </table>
+                            <script>
+                                var time = moment('<%= data[i].duedate %>').format("DD dddd, MMMM, YYYY");
+                                var datepickertime = moment('<%= data[i].duedate %>').format("DD/MM/YY")
+                                document.getElementById('<%= i %>').innerHTML = time;
+                            </script>
+                        </tr>
+                    <% } %>
+                </table>
+            <% } else { %>
+                <p id="finished-work">Your all done!</p>
+            <% } %>
         </div>
 
         <% include footer.ejs %>

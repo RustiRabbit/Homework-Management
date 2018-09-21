@@ -1,6 +1,6 @@
 <html>
     <head>
-        <title>Homework - Signup</title>
+        <title>Forgot Password</title>
         
         <!--CSS-->
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
@@ -13,14 +13,11 @@
     <body>
         <!--Header-->
         <%- include ../header.ejs %>
-        <h1 class="maintitle">Sign Up</h1>
+        <h1 class="maintitle">Forgot Password</h1>
+        <p style="text-align: center;">Please enter the email that your account is attached to. If the account exist you will get an email to that account</p>
         <form method="POST">
-            Username: <input type="text" name="username"><br>
             Email: <input type="email" name="email"><br>
-            First Name: <input type="text" name="firstname"><br>
-            Last Name: <input type="text" name="lastname"><br>
-            Password: <input type="text" name="password"><br>
-            <input type="submit" value="Sign Up">
+            <input type="submit" value="Forgot Password">
         </form>
     </body>
 </html>

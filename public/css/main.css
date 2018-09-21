@@ -8,10 +8,11 @@
 }
 
 .page-content {
-    margin-left:25%
+    margin-left:25%;
+    padding-top: 20px;
 }
 
-.dueworkTable {
+.infomationTable {
     padding-left:50%; 
     padding-right:50%;
     border: 1px solid black; 
@@ -89,6 +90,12 @@ th {
     display: block;
     margin-left: auto;
     margin-right: auto;
-    position:fixed;
-    bottom:0px;
- }
+    position: absolute;
+    bottom:20px;
+}
+
+#finished-work {
+    padding-left: 30%;
+    font-weight: 500;
+    font-size: 20px;
+}

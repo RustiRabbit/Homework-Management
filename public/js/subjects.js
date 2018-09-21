@@ -5,7 +5,7 @@ function removeSubject(id, row) {
     xmlhttp.send();
 
     var i = row.parentNode.parentNode.rowIndex;
-    document.getElementById("subjectTable").deleteRow(i);
+    document.getElementsByClassName("infomationTable")[0].deleteRow(i);
 }
 
 function ShowSubject(id) {

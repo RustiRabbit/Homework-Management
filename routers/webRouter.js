@@ -12,6 +12,9 @@ router.get('/features', function(req, res){
    res.render('features');
 });
 
-
+//Serve Features Page
+router.get('/changelog', function(req, res){
+  res.render('changelog');
+});
 
 module.exports = router

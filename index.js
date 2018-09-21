@@ -52,6 +52,7 @@ passport.use(new Strategy((username, password, cb) => {
             console.log("logged in!")
 
           } else {
+            cb(null, false);
             console.log("Wrong Password")
           }
         });
