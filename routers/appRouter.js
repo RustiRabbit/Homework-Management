@@ -5,6 +5,9 @@ var passport = require('passport');
 require('dotenv').load()
 const { Pool, Client } = require('pg')
 const bodyParser = require("body-parser");
+const nodemailer = require('nodemailer')
+const async = require('async');
+const crypto = require('crypto')
 
 //Database SSL
 var datauseSSL;
@@ -223,6 +226,108 @@ router.get('/auth/google/callback',
   function(req, res) {
     res.redirect('/app')
   });
+
+//Reset Password
+router.get('/user/forgot', function(req, res){
+    res.render('app/forget');
+});
+
+//Post Reset Password
+router.post('/user/forgot', function(req, res) {
+    async.waterfall([
+        function(done) {
+            console.log("Generate Token");
+            crypto.randomBytes(20, function(err, buf) {
+                var token = buf.toString('hex');
+                done(err, token);
+            })
+        },
+        function(token, done) {
+            console.log("Find User")
+            client.query("SELECT * FROM users WHERE email='" + req.body.email + "'" ,  (err, responce) => {
+                if(err) {
+                    console.log("There was an error with the Database. ERROR: " + err);
+                } else {
+                    if(responce.rows.length == 0 ) {
+                        res.send("You account dosn't exist")
+                    } else if(responce.rows[0].logintype == "google") {
+                        res.send("This account is a Google OAuth account. Please login with your Google Account")                        
+                    } else {
+                        var name = responce.rows[0].firstname + " " + responce.rows[0].lastname
+                        var email = responce.rows[0].email;
+                        client.query("UPDATE users SET resettoken=$1 WHERE email=$2", [token, req.body.email], (err, responce) => {
+                            if(err) {
+                                console.log("There was an error when setting Reset Token")
+                                res.send("There was an error when setting the reset token")
+                            } else {
+                                done(err, token, name, email)
+                            }
+                        });
+                        
+                    }
+
+                }
+            });
+        },
+        function(token, name, email, done) {
+            var err = sendMail('"Homework.School Reset Password" <reset@homework.school>', email, 'Reset your Password', "<h1>Homework.School Reset Password</h1><br><p>Hi " + name + ", We got a request to reset your password. If this wasn't you then you don't need to worry, you can discard this email. <br> If it was you then click here: <a href='http://localhost:5000/app/user/reset?token=" + token + "'>Reset your password</a></p>" )
+            
+            if(!err) {
+                done(err, "done");
+            }
+            
+        }
+    ], function(err, result) {
+        res.send("If your account exist, you should get an email with details on how to recover you account");
+    })
+
+    
+});
+
+router.get('/user/reset', function(req, res){
+    if(req.query.token == null) {
+        res.send("You need a token. Please go back to your emails and click on the link provided");
+    } else {
+        res.render('app/changepassword');
+    }
+});
+
+router.post('/user/reset', function(req, res){
+    console.log("Token: " + req.query.token)
+    client.query("SELECT * FROM users WHERE resetToken=$1", [req.query.token], (err, UserResponce) => {
+        if (err) {
+            console.log("Error: " + err)
+            res.send("There was a error with the Database");
+        } else {
+            console.log("Found a user with ResetToken")
+            if(req.query.token == UserResponce.rows[0].resettoken) {
+                console.log("The token's match")
+                bcrypt.hash(req.body.password, 10, function(err, hash) {
+                    if(err) {
+                        console.log("Error with Hash: " + err)
+                        res.send("There was an error with Hashing the password")
+                    }
+                    hashPassword = hash;
+                    console.log("Hashed the password: " + hash);
+                    client.query("UPDATE users SET password=$1 WHERE id=$2", [hashPassword, UserResponce.rows[0].id], (err, responce) => {
+                        if(err) {
+                            console.log("There was an error with Changing the Password in the Database. ERR: " + err);
+                            res.send("There was an error with Changing the database");
+                        } else {
+                            console.log("Finished!");
+                            res.send("The password has been changed. <a href='/app/login'>Login here</a>");
+                            sendMail('"Homework.School Reset Password" <reset@homework.school>', UserResponce.rows[0].email, 'Your Password has been changed', "<h1>Your Homework.School password has been changed</h1><br><p>If this wasn't you, please go <a href='http://localhost:5000/app/user/forgot'>here</a> and change your password</p>")
+                        }
+                    });
+                });
+
+            }
+        }
+    });
+
+});
+
+
 //Test if the app logged in
 function isLoggedIn(req, res, next) {
     if(req.isAuthenticated()) {
@@ -237,5 +342,33 @@ process.on('SIGINT', function() {
     console.log("*** CLOSED SERVER FROM appRouter.js ***")
 });
 
+function sendMail(from, to, subject, html) {
+    let transporter = nodemailer.createTransport({
+        host: process.env.EMAIL_SMTP,
+        port: 465,
+        secure: true, // true for 465, false for other ports
+        auth: {
+            user: process.env.EMAIL_USER,
+            pass: process.env.EMAIL_PASS,
+        }
+    });
+
+    // setup email data with unicode symbols
+    let mailOptions = {
+        from: from, // sender address
+        to: to, // list of receivers
+        subject: subject, // Subject line
+        html: html
+    };
+
+    // send mail with defined transport object
+    transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+            return console.log(error);
+        }
+        console.log('Message sent: %s', info.messageId);
+        return err;
+    });
+}
 
 module.exports = router
