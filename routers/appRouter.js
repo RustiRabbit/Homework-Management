@@ -298,6 +298,8 @@ router.post('/user/reset', function(req, res){
         if (err) {
             console.log("Error: " + err)
             res.send("There was a error with the Database");
+        } else if(UserResponce.rows.length == 0) {
+            res.send("The token is invalid");
         } else {
             console.log("Found a user with ResetToken")
             if(req.query.token == UserResponce.rows[0].resettoken) {
@@ -314,8 +316,14 @@ router.post('/user/reset', function(req, res){
                             console.log("There was an error with Changing the Password in the Database. ERR: " + err);
                             res.send("There was an error with Changing the database");
                         } else {
-                            console.log("Finished!");
-                            res.send("The password has been changed. <a href='/app/login'>Login here</a>");
+                            client.query("UPDATE users SET resettoken=null WHERE id=$1", [UserResponce.rows[0].id], (err,responce) => {
+                                if(err) {
+                                    console.log("There was a error when removing the Token from the Database. ERR: " + err);
+                                    res.send("There was a problem when removing the token from thte database");
+                                }
+                                console.log("Finished!")
+                                res.send("The password has been changed. <a href='/app/login'>Login here</a>");
+                            });
                             sendMail('"Homework.School Reset Password" <reset@homework.school>', UserResponce.rows[0].email, 'Your Password has been changed', "<h1>Your Homework.School password has been changed</h1><br><p>If this wasn't you, please go <a href='http://localhost:5000/app/user/forgot'>here</a> and change your password</p>")
                         }
                     });
