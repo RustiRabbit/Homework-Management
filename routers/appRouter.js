@@ -270,7 +270,7 @@ router.post('/user/forgot', function(req, res) {
             });
         },
         function(token, name, email, done) {
-            var err = sendMail('"Homework.School Reset Password" <reset@homework.school>', email, 'Reset your Password', "<h1>Homework.School Reset Password</h1><br><p>Hi " + name + ", We got a request to reset your password. If this wasn't you then you don't need to worry, you can discard this email. <br> If it was you then click here: <a href='http://localhost:5000/app/user/reset?token=" + token + "'>Reset your password</a></p>" )
+            var err = sendMail('"Homework.School Reset Password" <reset@homework.school>', email, 'Reset your Password', "<h1>Homework.School Reset Password</h1><br><p>Hi " + name + ", We got a request to reset your password. If this wasn't you then you don't need to worry, you can discard this email. <br> If it was you then click here: <a href='" + process.env.EMAIL_START_LINK + "/app/user/reset?token=" + token + "'>Reset your password</a></p>" )
             
             if(!err) {
                 done(err, "done");
@@ -324,7 +324,7 @@ router.post('/user/reset', function(req, res){
                                 console.log("Finished!")
                                 res.send("The password has been changed. <a href='/app/login'>Login here</a>");
                             });
-                            sendMail('"Homework.School Reset Password" <reset@homework.school>', UserResponce.rows[0].email, 'Your Password has been changed', "<h1>Your Homework.School password has been changed</h1><br><p>If this wasn't you, please go <a href='http://localhost:5000/app/user/forgot'>here</a> and change your password</p>")
+                            sendMail('"Homework.School Reset Password" <reset@homework.school>', UserResponce.rows[0].email, 'Your Password has been changed', "<h1>Your Homework.School password has been changed</h1><br><p>If this wasn't you, please go <a href='" + process.env.EMAIL_START_LINK + "/app/user/forgot'>here</a> and change your password</p>")
                         }
                     });
                 });
