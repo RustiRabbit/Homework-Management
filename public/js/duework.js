@@ -30,7 +30,7 @@ function changeDueWork(id, label, duedate, row) {
     var modal = document.getElementById('myModal' + id);
     modal.style.display = "";
     console.log("Change DueWork. ID: " + id + ". Label: " + label + ". DueDate: " + duedate);
-    
+        
     xmlhttp = new XMLHttpRequest();
 
     xmlhttp.onreadystatechange = function() {

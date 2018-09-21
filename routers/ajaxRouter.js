@@ -67,11 +67,18 @@ router.get('/duework/edit', function(req, res) {
 //Subjects
 router.get('/subjects/remove', function(req, res) {
     if(req.query.id != null) {
-        client.query("DELETE FROM subjects WHERE id=$1", [req.query.id], function(err, responce) {
+        client.query("DELETE FROM duework WHERE subjectid=$1", [req.query.id], function(err, responce) {
             if(err) {
                 console.log("ERROR: " + err);
             } else {
-                console.log("Updated Record");
+                client.query("DELETE FROM subjects WHERE id=$1", [req.query.id], function(err, responce) {
+                    if (err) {
+                        console.log("ERROR: " + err);
+                    } else {
+                        console.log("Updated Record");
+                    }
+                });
+                
             }
         });
     } else {

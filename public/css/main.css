@@ -90,6 +90,12 @@ th {
     display: block;
     margin-left: auto;
     margin-right: auto;
-    position:fixed;
-    bottom:0px;
+    position: absolute;
+    bottom:20px;
+}
+
+#finished-work {
+    padding-left: 30%;
+    font-weight: 500;
+    font-size: 20px;
 }
