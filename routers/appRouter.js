@@ -225,7 +225,12 @@ router.get('/auth/google/callback',
   passport.authenticate('google'),
   function(req, res) {
     res.redirect('/app')
-  });
+});
+
+// Settings Page
+router.get('/settings', isLoggedIn, function(req, res) {
+    res.render('app/settings');
+});
 
 //Reset Password
 router.get('/user/forgot', function(req, res){
