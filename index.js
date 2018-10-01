@@ -1,9 +1,13 @@
 var app = require('express')();
 var express = require('express');
 var path = require('path');
-var http = require('http').Server(app);
+var http = require('http')
 require('dotenv').load()
 const PORT = process.env.PORT || 5000
+
+//Server Var Creation
+//Server
+var server = http.createServer(app);
 
 //Hashing
 var bcrypt = require('bcrypt');
@@ -11,20 +15,32 @@ const saltRounds = process.env.SALTROUNDS;
 
 //Databse
 const { Pool, Client } = require('pg')
+var datauseSSL;
+if (process.env.DATASUPPORTSSL == "false") {
+  datauseSSL = false;
+} else {
+  datauseSSL = true;
+}
+
+//Database
+const client = new Client({
+  connectionString: process.env.DATAURI,
+  ssl: datauseSSL,
+});
+client.connect();
 
 //Passport
 var passport = require('passport');
 var Strategy = require('passport-local').Strategy;
+var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 
 //Passport Local 
 passport.use(new Strategy((username, password, cb) => {
-  const client = new Client({
-    connectionString: process.env.DATAURI,
-    ssl: false,
-  });
-  client.connect();
   client.query("SELECT id, username, password, firstname, lastname, email, type FROM users WHERE username='" + username + "'", (err, res) => {
-    if (err) {
+    if (res.rows[0] == null) {
+      console.log("It doesn't match")
+      cb(null, false)
+    } else if (err) {
       console.log(err)
     } else {
       console.log("Database username = " + res.rows[0].username)
@@ -35,16 +51,51 @@ passport.use(new Strategy((username, password, cb) => {
             cb(null, { id: res.rows[0].id, username: res.rows[0].username, firstname: res.rows[0].firstname, lastname: res.rows[0].lastname, email: res.rows[0].email, type: res.rows[0].type})
             console.log("logged in!")
 
+          } else {
+            cb(null, false);
+            console.log("Wrong Password")
           }
         });
       } else {
         cb(null, false)
+        console.log("Wrong Username")
       }
     }
-    client.end();
   })
   
 }))
+
+//Passport Google OAuth 2.0
+passport.use(new GoogleStrategy({
+    clientID: process.env.GOOGLE_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    callbackURL: process.env.GOOGLE_REDIRECT_URL
+  }, function(accessToken, refreshToken, profile, done) {
+    console.log("Google ID: " + profile.id);
+    console.log("First Name: " + profile.name.givenName);
+    console.log("Last Name: " + profile.name.familyName);
+    console.log("Email: " + profile.emails[0].value)
+
+    //Query the Database
+    client.query('SELECT * FROM users WHERE googleid=$1', [profile.id], (err, res) => {
+      if (res.rows[0] == null) {
+        console.log("WE NEED TO MAKE A NEW ROW!!")
+        client.query("INSERT INTO users (firstname, lastname, email, type, logintype, googleid) VALUES ($1, $2, $3, 'user', 'google', $4)", [profile.name.givenName, profile.name.familyName, profile.emails[0].value, profile.id], (err, res) => {
+          if (err) {
+            console.log("ERROR: " + err);
+            done(null, false);
+          } else {
+            console.log("Added a new GOOGLE row");
+            done(null, {id: "You need to re-login to get a good ID reading", firstname: profile.name.givenName, lastname: profile.name.familyName, email: profile.emails[0].value, type: "User"});
+          }
+        })
+      } else {
+        done(null, {id: res.rows[0].id, firstname: res.rows[0].firstname, lastname: res.rows[0].lastname, email: res.rows[0].email, type: res.rows[0].type});
+      }
+    })
+
+  }
+));
 
 //Serialize Users (Add them to req)
 passport.serializeUser(function(user, done) {
@@ -66,18 +117,18 @@ app.use(require('express-session')({ secret: 'keyboard cat', resave: false, save
 
 // Initialize Passport and restore authentication state, if any, from the
 // session.
-/*app.use(passport.initialize());
-app.use(passport.session());*/
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use(function(req, res, next){
   res.locals.user = req.user || null
   next();
 })
 
-
 //Routers
 var webRouter = require('./routers/webRouter');
 var appRouter = require('./routers/appRouter');
+var ajaxRouter = require('./routers/ajaxRouter');
 
 //Static Files
 app.use('/static', express.static(path.join(__dirname, 'public')))
@@ -85,16 +136,39 @@ app.use('/static', express.static(path.join(__dirname, 'public')))
 //Use Router
 app.use('/', webRouter)
 app.use('/app', appRouter)
-
-
+app.use('/ajax', ajaxRouter)
 
 //The 404 Route
-app.get('*', function(req, res){
-  res.render('404')
+app.get('/*', function(req, res){
+  res.status(404).render('404')
 });
 
-//Server
-http.listen(PORT, function(){
+//Server Close Functions (Everything should lead to this)
+function ServerClose(serverclose) {
+  console.log("*** Closing Server ***")
+  //This works out if you are closing the server forcfully (Ctrl+C) or closing server.close).
+
+  client.end();
+
+  //If you aren't using server.close, than close the process, otherwise server.close will do it for you
+  if(serverclose == false) {
+    process.exit(0);
+  }
+}
+
+server.on('close', function() {
+  ServerClose(true);
+})
+
+//Fixes Ctrl+C
+process.on('SIGINT', function() {
+  ServerClose(false);
+});
+
+//Listen
+server.listen(PORT, function(){
   console.log("Starting Server");
   console.log(`Listening on *:${PORT}`);
 });   
+
+module.exports = app; // for testing

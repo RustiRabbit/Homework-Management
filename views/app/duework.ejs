@@ -3,14 +3,98 @@
         <title>Homework</title>
         
         <!--CSS-->
+        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+        <link rel="stylesheet" href="/static/css/main.css">
+        <link rel="stylesheet" href="/static/css/flatpickr.min.css" type="text/css"/>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
         <link rel="stylesheet" href="/static/css/navigation.css">
 
         <!--Javascript-->
         <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+        <script src="/static/js/moment.js"></script>
+        <script src="/static/js/duework.js"></script>
+        <script src="/static/js/flatpickr.js"></script>
     </head>
+    <script>
+    
+    </script>
     <body>
         <%- include header.ejs %>
-        <h1>Duework</h1>
+        <div class="page-content">
+        <h1 class="apptitle" >Duework</h1>
+        <p><strong><%- message %></strong></p>
+        <table class="infomationTable">
+            <tr>
+                <th>Complete</th>
+                <th>Subject Name</th>
+                <th>Duework Label</th>
+                <th>Due Date</th>
+                <th>Delete</th>
+                <th>Edit</th>
+            </tr>
+            <% for(var i = 0; i < data.length; i++) { %> 
+            <tr id="tr<%= data[i].id %>">
+
+                <td><input type="checkbox" id="<%= i %>check" onchange="tickDuework(<%= data[i].id %>, this)"></td>
+
+                <% for(var v = 0; v < subjectdata.length; v++) {%>
+                    <% if (data[i].subjectid == subjectdata[v].id) {%>
+                        <td><%= subjectdata[v].subjectname %></td>
+                    <% } %>
+                <% } %>
+                
+                <td><%= data[i].worklabel %></td>
+                <td id='<%= i %>'></td>
+                <td><a href="#" onclick="removeDueWork(<%= data[i].id %>, this)">Delete</a></td>
+                <td><a href="#" onclick="ShowDueWork(<%= data[i].id %>)">Edit</a></td>
+
+                <!-- The Modal -->
+                <div id="myModal<%= data[i].id %>" class="modal">
+                <!-- Modal content -->
+                    <div class="modal-content">
+                        <span class="close" onclick="closeModal(<%= data[i].id %>)">&times;</span>
+                        <h4>Edit - <%= data[i].worklabel %></h4>
+                        <% for(var v = 0; v < subjectdata.length; v++) {%>
+                            <% if (data[i].subjectid == subjectdata[v].id) {%>
+                                <p>Subject Name: <%=  subjectdata[v].subjectname %></p>                            
+                            <% } %>
+                        <% } %>
+                        <p>Label: </p> <input type="text" id="newLabel<%= data[i].id %>" value="<%= data[i].worklabel %>"><br>
+                        <p>Due Date: </p> <input type="text" id="datepicker<%= data[i].id %>"><br>
+                        <p><strong>This dosen't work</strong></p>
+                        <button class="save" onclick="changeDueWork(<%= data[i].id %>, $('#newLabel<%= data[i].id %>')[0].value, $('#datepicker<%= data[i].id %>')[0].value, this)">Save</button>
+                    </div>
+                </div>
+                <script>
+                var time = moment('<%= data[i].duedate %>').format("DD dddd, MMMM, YYYY");
+                var datepickertime = moment('<%= data[i].duedate %>').format("DD/MM/YY")
+                document.getElementById('<%= i %>').innerHTML = time;
+
+                flatpickr("#datepicker<%= data[i].id %>", {
+                    dateFormat: "m/d/Y",
+                    defaultDate: datepickertime,
+                    onChange : function() {
+                        var duedate = $("#datepicker<%= data[i].id %>")
+                        duedate.innerHTML = moment(duedate.value).format("DD/MM/YYYY"); 
+                    }
+                });
+
+                var time = moment('<%= data[i].duedate %>').format("DD dddd, MMMM, YYYY");
+                document.getElementById('<%= i %>').innerHTML = time;
+                document.getElementById('<%= i %>check').checked = <%= data[i].complete %>;
+
+                if (<%= data[i].complete %> == true) {
+                    document.getElementById('tr<%= data[i].id %>').setAttribute('class', 'trCompleted')
+                }
+                </script>
+
+            </tr>
+            <% } %>
+        </table>
+
+        <a href="/app/duework/create" class="createButton">Create a new DueWork</a>
+        </div>
+        <% include footer.ejs %>
+
     </body>
 </html>
