@@ -65,3 +65,6 @@ typings/
 
 # Personal Infomation
 .env
+
+#VS Code
+.vscode/
